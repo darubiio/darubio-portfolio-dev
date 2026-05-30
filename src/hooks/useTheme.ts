@@ -1,29 +1,22 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
+import { createPersistedStore } from "@/lib/persistedState";
 
 export type Theme = "dark" | "light";
 
-const STORAGE_KEY = "rubio-theme";
+const store = createPersistedStore<Theme>(
+  "rubio-theme",
+  "dark",
+  (raw) => (raw === "light" ? "light" : "dark"),
+  (theme) => document.documentElement.setAttribute("data-theme", theme),
+);
 
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>("dark");
-  const [hydrated, setHydrated] = useState(false);
+  const theme = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getServerSnapshot);
 
-  useEffect(() => {
-    const stored = (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? "dark";
-    setTheme(stored);
-    setHydrated(true);
-  }, []);
+  const setTheme = useCallback((next: Theme) => store.set(next), []);
+  const toggleTheme = useCallback(() => store.set(store.getSnapshot() === "dark" ? "light" : "dark"), []);
 
-  useEffect(() => {
-    if (!hydrated) return;
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem(STORAGE_KEY, theme);
-  }, [theme, hydrated]);
-
-  const setThemeTo = useCallback((next: Theme) => setTheme(next), []);
-  const toggleTheme = useCallback(() => setTheme((t) => (t === "dark" ? "light" : "dark")), []);
-
-  return { theme, setTheme: setThemeTo, toggleTheme };
+  return { theme, setTheme, toggleTheme };
 }

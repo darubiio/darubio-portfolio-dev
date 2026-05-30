@@ -1,29 +1,19 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 import { blip } from "@/lib/sound";
+import { createPersistedStore } from "@/lib/persistedState";
 
-const STORAGE_KEY = "rubio-sound";
+const store = createPersistedStore<"on" | "off">("rubio-sound", "off", (raw) => (raw === "on" ? "on" : "off"));
 
 export function useSound() {
-  const [sound, setSound] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
+  const sound = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getServerSnapshot) === "on";
 
-  useEffect(() => {
-    setSound(localStorage.getItem(STORAGE_KEY) === "on");
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    localStorage.setItem(STORAGE_KEY, sound ? "on" : "off");
-  }, [sound, hydrated]);
-
-  const toggleSound = useCallback(() => setSound((s) => !s), []);
+  const toggleSound = useCallback(() => store.set(store.getSnapshot() === "on" ? "off" : "on"), []);
 
   const playKey = useCallback(() => {
-    if (sound) blip();
-  }, [sound]);
+    if (store.getSnapshot() === "on") blip();
+  }, []);
 
   return { sound, toggleSound, playKey };
 }
