@@ -57,23 +57,40 @@ export const metadata: Metadata = {
   },
 };
 
-export function personJsonLd() {
+const personId = `${SITE_URL}/#person`;
+
+export function jsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": "Person",
-    name: identity.fullName,
-    alternateName: identity.name,
-    jobTitle: identity.role,
-    description,
-    url: SITE_URL,
-    email: `mailto:${contact.email}`,
-    telephone: contact.phone,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Madrid",
-      addressCountry: "ES",
-    },
-    knowsAbout: portfolio.skills.flatMap((group) => group.items),
-    sameAs: [externalUrl(contact.linkedin), externalUrl(contact.github)],
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": personId,
+        name: identity.fullName,
+        alternateName: identity.name,
+        jobTitle: identity.role,
+        description,
+        url: SITE_URL,
+        email: `mailto:${contact.email}`,
+        telephone: contact.phone,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Madrid",
+          addressCountry: "ES",
+        },
+        knowsAbout: portfolio.skills.flatMap((group) => group.items),
+        sameAs: [externalUrl(contact.linkedin), externalUrl(contact.github)],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: `${identity.name} — Terminal Portfolio`,
+        description,
+        inLanguage: "en",
+        author: { "@id": personId },
+        publisher: { "@id": personId },
+      },
+    ],
   };
 }
