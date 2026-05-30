@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useEffectEvent, useRef } from "react";
 import { MATRIX_GLYPHS } from "@/lib/ascii";
 
 const CELL = 16;
 
 export function MatrixRain({ onExit }: { onExit: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const onExitEvent = useEffectEvent(onExit);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -46,7 +47,7 @@ export function MatrixRain({ onExit }: { onExit: () => void }) {
       armed = true;
     }, 100);
     const exit = () => {
-      if (armed) onExit();
+      if (armed) onExitEvent();
     };
     window.addEventListener("keydown", exit);
     window.addEventListener("pointerdown", exit);
@@ -58,7 +59,7 @@ export function MatrixRain({ onExit }: { onExit: () => void }) {
       window.removeEventListener("keydown", exit);
       window.removeEventListener("pointerdown", exit);
     };
-  }, [onExit]);
+  }, []);
 
   return <canvas ref={canvasRef} className="matrix-canvas" aria-hidden />;
 }

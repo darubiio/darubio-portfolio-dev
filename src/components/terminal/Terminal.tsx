@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import type { StaticImageData } from "next/image";
-import { TerminalProvider, type TerminalActions } from "@/context/TerminalContext";
+import { TerminalContext, type TerminalActions } from "@/context/TerminalContext";
 import { AmbientBackground } from "@/components/terminal/AmbientBackground";
 import { TitleBar } from "@/components/terminal/TitleBar";
 import { BootLog } from "@/components/terminal/BootLog";
@@ -32,36 +32,30 @@ export function Terminal() {
   const shell = useTerminalShell({ theme, setTheme });
   const { history, run, clear, showWelcome, matrixActive, exitMatrix, commandHistory } = shell;
 
-  const focusInput = useCallback(() => inputRef.current?.focus(), []);
+  const focusInput = () => inputRef.current?.focus();
 
-  const onReady = useCallback(() => {
+  const onReady = () => {
     showWelcome();
     scrollToBottom();
     window.setTimeout(focusInput, 40);
-  }, [showWelcome, scrollToBottom, focusInput]);
+  };
 
   const { bootLines, booting, skipNow } = useBootSequence(onReady);
 
-  const runCommand = useCallback(
-    (command: string) => {
-      skipNow();
-      run(command);
-      focusInput();
-    },
-    [skipNow, run, focusInput],
-  );
+  const runCommand = (command: string) => {
+    skipNow();
+    run(command);
+    focusInput();
+  };
 
-  const actions = useMemo<TerminalActions>(
-    () => ({ run: runCommand, openLightbox: setLightbox }),
-    [runCommand],
-  );
+  const actions: TerminalActions = { run: runCommand, openLightbox: setLightbox };
 
   useEffect(() => {
     scrollToBottom();
   }, [bootLines, history, scrollToBottom]);
 
   return (
-    <TerminalProvider value={actions}>
+    <TerminalContext value={actions}>
       <AmbientBackground />
       <div className="stage" onClick={focusInput}>
         <div className="window" onClick={(event) => event.stopPropagation()}>
@@ -88,6 +82,6 @@ export function Terminal() {
       </div>
       {matrixActive ? <MatrixRain onExit={exitMatrix} /> : null}
       <Lightbox image={lightbox} onClose={() => setLightbox(null)} />
-    </TerminalProvider>
+    </TerminalContext>
   );
 }

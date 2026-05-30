@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import { createContext, use } from "react";
 import type { StaticImageData } from "next/image";
 
 export interface TerminalActions {
@@ -8,12 +8,10 @@ export interface TerminalActions {
   openLightbox: (image: StaticImageData) => void;
 }
 
-const TerminalContext = createContext<TerminalActions | null>(null);
-
-export const TerminalProvider = TerminalContext.Provider;
+export const TerminalContext = createContext<TerminalActions | null>(null);
 
 export function useTerminal(): TerminalActions {
-  const ctx = useContext(TerminalContext);
-  if (!ctx) throw new Error("useTerminal must be used within a TerminalProvider");
+  const ctx = use(TerminalContext);
+  if (!ctx) throw new Error("useTerminal must be used within a TerminalContext provider");
   return ctx;
 }
