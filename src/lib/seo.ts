@@ -1,0 +1,79 @@
+import type { Metadata } from "next";
+import { portfolio } from "@/lib/portfolio";
+import { SITE_URL, externalUrl } from "@/lib/site";
+
+const { identity, contact } = portfolio;
+
+const title = `${identity.name} — ${identity.role}`;
+const description = `${identity.role} · ${identity.stack}. ${identity.tagline}`;
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: title,
+    template: `%s · ${identity.name}`,
+  },
+  description,
+  applicationName: `${identity.name} — Terminal Portfolio`,
+  authors: [{ name: identity.fullName, url: SITE_URL }],
+  creator: identity.fullName,
+  keywords: [
+    identity.name,
+    identity.role,
+    "Software Engineer",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "Frontend",
+    "Full-stack",
+    "Madrid",
+    "Portfolio",
+  ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: `${identity.name} — Terminal Portfolio`,
+    title,
+    description,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
+};
+
+export function personJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: identity.fullName,
+    alternateName: identity.name,
+    jobTitle: identity.role,
+    description,
+    url: SITE_URL,
+    email: `mailto:${contact.email}`,
+    telephone: contact.phone,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Madrid",
+      addressCountry: "ES",
+    },
+    knowsAbout: portfolio.skills.flatMap((group) => group.items),
+    sameAs: [externalUrl(contact.linkedin), externalUrl(contact.github)],
+  };
+}
