@@ -2,6 +2,7 @@
   "name": "darubio-portfolio",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@10.17.1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -22,5 +23,8 @@
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.15",
     "typescript": "5.5.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["sharp", "unrs-resolver"]
   }
 }
