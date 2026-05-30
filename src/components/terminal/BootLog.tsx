@@ -13,11 +13,11 @@ export function BootLog({ bootLines, booting }: BootLogProps) {
       {bootLines.map(([timestamp, message, status]) => (
         <div className="boot-line row" key={message}>
           <span className="ts">[{timestamp.padStart(8)}]</span> {message}{" "}
-          {status === "ok" && <span className="ok">[ ok ]</span>}
-          {status === "warn" && <span className="warn">[warn]</span>}
+          {status === "ok" ? <span className="ok">[ ok ]</span> : null}
+          {status === "warn" ? <span className="warn">[warn]</span> : null}
         </div>
       ))}
-      {booting && <div className="row type-caret muted" style={{ marginTop: 2 }} />}
+      {booting ? <div className="row type-caret muted" style={{ marginTop: 2 }} /> : null}
     </div>
   );
 }

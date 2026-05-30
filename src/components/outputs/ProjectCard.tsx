@@ -17,18 +17,18 @@ export function ProjectCard({ project }: { project: Project }) {
           <li key={highlight}>{highlight}</li>
         ))}
       </ul>
-      {project.shots.length > 0 && <ScreenshotStrip shots={project.shots} />}
-      {project.placeholder && <div className="proj-ph">{project.placeholder}</div>}
+      {project.shots.length > 0 ? <ScreenshotStrip shots={project.shots} /> : null}
+      {project.placeholder ? <div className="proj-ph">{project.placeholder}</div> : null}
       <div className="proj-foot">
         <ChipList items={project.stack} accent />
-        {project.link && (
+        {project.link ? (
           <div style={{ marginTop: 8 }}>
             <span className="muted">↳ </span>
             <a className="link" href={externalUrl(project.link)} target="_blank" rel="noreferrer">
               {project.link}
             </a>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
