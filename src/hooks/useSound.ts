@@ -5,17 +5,19 @@ import { blip } from "@/lib/sound";
 
 const STORAGE_KEY = "rubio-sound";
 
-function readInitialSound(): boolean {
-  if (typeof window === "undefined") return false;
-  return localStorage.getItem(STORAGE_KEY) === "on";
-}
-
 export function useSound() {
-  const [sound, setSound] = useState<boolean>(readInitialSound);
+  const [sound, setSound] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    setSound(localStorage.getItem(STORAGE_KEY) === "on");
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
     localStorage.setItem(STORAGE_KEY, sound ? "on" : "off");
-  }, [sound]);
+  }, [sound, hydrated]);
 
   const toggleSound = useCallback(() => setSound((s) => !s), []);
 
