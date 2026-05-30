@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import type { StaticImageData } from "next/image";
 import { TerminalProvider, type TerminalActions } from "@/context/TerminalContext";
 import { AmbientBackground } from "@/components/terminal/AmbientBackground";
@@ -10,12 +11,16 @@ import { HistoryView } from "@/components/terminal/HistoryView";
 import { CommandPalette } from "@/components/terminal/CommandPalette";
 import { InputLine } from "@/components/terminal/InputLine";
 import { Lightbox } from "@/components/terminal/Lightbox";
-import { MatrixRain } from "@/components/terminal/MatrixRain";
 import { useTheme } from "@/hooks/useTheme";
 import { useSound } from "@/hooks/useSound";
 import { useAutoScroll } from "@/hooks/useAutoScroll";
 import { useBootSequence } from "@/hooks/useBootSequence";
 import { useTerminalShell } from "@/hooks/useTerminalShell";
+
+const MatrixRain = dynamic(
+  () => import("@/components/terminal/MatrixRain").then((mod) => mod.MatrixRain),
+  { ssr: false },
+);
 
 export function Terminal() {
   const { theme, setTheme } = useTheme();
@@ -24,7 +29,7 @@ export function Terminal() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [lightbox, setLightbox] = useState<StaticImageData | null>(null);
 
-  const shell = useTerminalShell({ theme, setTheme, scrollToBottom });
+  const shell = useTerminalShell({ theme, setTheme });
   const { history, run, clear, showWelcome, matrixActive, exitMatrix, commandHistory } = shell;
 
   const focusInput = useCallback(() => inputRef.current?.focus(), []);
@@ -71,7 +76,7 @@ export function Terminal() {
             <BootLog bootLines={bootLines} booting={booting} />
             <HistoryView history={history} />
           </div>
-          {!booting && <CommandPalette playKey={playKey} />}
+          {booting ? null : <CommandPalette playKey={playKey} />}
           <InputLine
             inputRef={inputRef}
             run={runCommand}
@@ -81,7 +86,7 @@ export function Terminal() {
           />
         </div>
       </div>
-      {matrixActive && <MatrixRain onExit={exitMatrix} />}
+      {matrixActive ? <MatrixRain onExit={exitMatrix} /> : null}
       <Lightbox image={lightbox} onClose={() => setLightbox(null)} />
     </TerminalProvider>
   );
