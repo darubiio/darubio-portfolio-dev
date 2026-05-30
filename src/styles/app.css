@@ -719,9 +719,14 @@ button.link:hover {
   border-top: 1px solid var(--border-2);
   background: var(--glass-2);
   position: relative;
+  font-size: 13.5px;
+  line-height: 17px;
 }
 .input-bar .ps1 {
   white-space: nowrap;
+  font-size: 13.5px;
+}
+.input-bar .cmd-echo {
   font-size: 13.5px;
 }
 .input-bar input {
