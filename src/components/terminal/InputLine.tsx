@@ -6,7 +6,7 @@ import { AUTOCOMPLETE } from "@/lib/commands";
 import type { useCommandHistory } from "@/hooks/useCommandHistory";
 
 interface InputLineProps {
-  inputRef: RefObject<HTMLInputElement>;
+  inputRef: RefObject<HTMLInputElement | null>;
   run: (command: string) => void;
   clear: () => void;
   playKey: () => void;
