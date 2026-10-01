@@ -20,11 +20,11 @@
   --shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
   --shot-border: rgba(255, 255, 255, 0.1);
   --wash: rgba(198, 120, 221, 0.3);
-  --glow-a: rgba(97, 175, 239, 0.75);
-  --glow-b: rgba(198, 120, 221, 0.65);
-  --glow-c: rgba(86, 182, 194, 0.7);
-  --reflect: rgba(255, 255, 255, 0.55);
-  --ring-line: rgba(255, 255, 255, 0.14);
+  --glow-a: rgba(97, 175, 239, 0.9);
+  --glow-b: rgba(198, 120, 221, 0.82);
+  --glow-c: rgba(86, 182, 194, 0.88);
+  --reflect: rgba(255, 255, 255, 0.72);
+  --ring-line: rgba(255, 255, 255, 0.22);
   --vignette: rgba(0, 0, 0, 0.6);
   --grid-line: rgba(255, 255, 255, 0.025);
 }
@@ -51,11 +51,11 @@
   --shadow: 0 30px 70px -24px rgba(48, 52, 70, 0.45), 0 6px 20px -8px rgba(48, 52, 70, 0.3);
   --shot-border: rgba(0, 0, 0, 0.12);
   --wash: rgba(166, 38, 164, 0.18);
-  --glow-a: rgba(64, 120, 242, 0.45);
-  --glow-b: rgba(166, 38, 164, 0.35);
-  --glow-c: rgba(1, 132, 188, 0.4);
+  --glow-a: rgba(64, 120, 242, 0.6);
+  --glow-b: rgba(166, 38, 164, 0.5);
+  --glow-c: rgba(1, 132, 188, 0.55);
   --reflect: rgba(255, 255, 255, 0.85);
-  --ring-line: rgba(0, 0, 0, 0.16);
+  --ring-line: rgba(0, 0, 0, 0.22);
   --vignette: rgba(48, 52, 70, 0.35);
   --grid-line: rgba(0, 0, 0, 0.03);
 }

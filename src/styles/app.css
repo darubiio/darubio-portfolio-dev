@@ -82,14 +82,23 @@ body {
   top: 0;
   transform-style: preserve-3d;
 }
+/* Each ring sits off the gyro's axis, so the group's turn swings it across
+   the screen instead of spinning in place. */
 .tilt.t1 {
-  transform: rotateX(68deg) rotateY(-12deg);
+  transform: translate3d(-28vw, -10vh, 0) rotateX(68deg) rotateY(-12deg);
 }
 .tilt.t2 {
-  transform: rotateY(64deg) rotateX(22deg);
+  transform: translate3d(26vw, 12vh, 0) rotateY(64deg) rotateX(22deg);
 }
 .tilt.t3 {
-  transform: rotateX(-48deg) rotateY(-34deg);
+  transform: translate3d(4vw, 30vh, 0) rotateX(-48deg) rotateY(-34deg);
+}
+/* The whole gyroscope wanders slowly around the viewport. */
+.drift {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  animation: drift 82s ease-in-out infinite;
 }
 .ring {
   position: absolute;
@@ -144,6 +153,65 @@ body {
   --breathe: 11s;
   --hue: 25s;
   --reflect-spin: 41s;
+}
+/* Pointer glow: a ring of the same material follows the mouse over the
+   background and sheds expanding ripples as it travels. Positioned from JS via
+   transform only (PointerGlow.tsx); ripples run on the Web Animations API. */
+.pointer-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.pointer-ring,
+.ripple {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.pointer-ring {
+  width: 240px;
+  height: 240px;
+  margin: -120px 0 0 -120px;
+  border: 1px solid var(--ring-line);
+  background: conic-gradient(from 20deg, transparent 0 52%, var(--glow-a) 72%, transparent 92%);
+  mask: radial-gradient(closest-side, transparent 0 calc(100% - 24px), #000 calc(100% - 22px));
+  transition: opacity 0.35s ease;
+  animation:
+    breathe 5s ease-in-out infinite alternate,
+    hue 9s ease-in-out infinite alternate;
+}
+.pointer-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 40%, var(--reflect) 47%, transparent 54%);
+  animation: spin-back 6s linear infinite;
+}
+.ripple {
+  width: 170px;
+  height: 170px;
+  margin: -85px 0 0 -85px;
+  background: conic-gradient(from 0deg, transparent 0 45%, var(--glow-b) 68%, var(--glow-c) 82%, transparent 100%);
+  mask: radial-gradient(closest-side, transparent 0 calc(100% - 16px), #000 calc(100% - 14px));
+}
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(-20vw, 12vh, 0);
+  }
+  50% {
+    transform: translate3d(12vw, -18vh, 0);
+  }
+  75% {
+    transform: translate3d(22vw, 14vh, 0);
+  }
 }
 @keyframes gyro {
   from {
@@ -1071,6 +1139,7 @@ button.link:hover {
 }
 @media (prefers-reduced-motion: reduce) {
   .wash,
+  .drift,
   .gyro,
   .ring,
   .ring::after {
@@ -1080,6 +1149,7 @@ button.link:hover {
 /* Small screens: freeze the ambient motion (battery) — refraction is off there anyway. */
 @media (max-width: 720px) {
   .wash,
+  .drift,
   .gyro,
   .ring,
   .ring::after {
