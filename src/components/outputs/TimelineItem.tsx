@@ -1,7 +1,12 @@
+"use client";
+
 import { ChipList } from "@/components/outputs/ChipList";
+import { useMessages } from "@/hooks/useMessages";
 import type { ExperienceEntry } from "@/lib/types";
 
 export function TimelineItem({ entry }: { entry: ExperienceEntry }) {
+  const t = useMessages();
+
   return (
     <div className={entry.current ? "tl-item cur" : "tl-item"}>
       <span className="tl-dot" />
@@ -13,7 +18,7 @@ export function TimelineItem({ entry }: { entry: ExperienceEntry }) {
       </div>
       <div className="tl-sub">
         {entry.place} · {entry.sector}
-        {entry.current ? " · now" : ""}
+        {entry.current ? ` · ${t.timeline.now}` : ""}
       </div>
       <ul className="tl-pts">
         {entry.points.map((point) => (

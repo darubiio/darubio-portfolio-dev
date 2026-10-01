@@ -9,9 +9,13 @@ import { TitleBar } from "@/components/terminal/TitleBar";
 import { BootLog } from "@/components/terminal/BootLog";
 import { HistoryView } from "@/components/terminal/HistoryView";
 import { CommandPalette } from "@/components/terminal/CommandPalette";
+import { LangHint } from "@/components/terminal/LangHint";
 import { InputLine } from "@/components/terminal/InputLine";
 import { Lightbox } from "@/components/terminal/Lightbox";
+import { readInitialCommand } from "@/lib/deeplink";
 import { useTheme } from "@/hooks/useTheme";
+import { useLang } from "@/hooks/useLang";
+import { useMessages } from "@/hooks/useMessages";
 import { useSound } from "@/hooks/useSound";
 import { useAutoScroll } from "@/hooks/useAutoScroll";
 import { useBootSequence } from "@/hooks/useBootSequence";
@@ -24,23 +28,27 @@ const MatrixRain = dynamic(
 
 export function Terminal() {
   const { theme, setTheme } = useTheme();
+  const { lang, setLang } = useLang();
+  const t = useMessages();
   const { sound, toggleSound, playKey } = useSound();
   const { ref: termRef, scrollToBottom } = useAutoScroll<HTMLDivElement>();
   const inputRef = useRef<HTMLInputElement>(null);
   const [lightbox, setLightbox] = useState<StaticImageData | null>(null);
 
-  const shell = useTerminalShell({ theme, setTheme });
+  const shell = useTerminalShell({ theme, setTheme, lang, setLang });
   const { history, run, clear, showWelcome, matrixActive, exitMatrix, commandHistory } = shell;
 
   const focusInput = () => inputRef.current?.focus();
 
   const onReady = () => {
-    showWelcome();
+    const initial = readInitialCommand();
+    if (initial) run(initial);
+    else showWelcome();
     scrollToBottom();
     window.setTimeout(focusInput, 40);
   };
 
-  const { bootLines, booting, skipNow } = useBootSequence(onReady);
+  const { bootLines, booting, skipNow } = useBootSequence(onReady, t.boot);
 
   const runCommand = (command: string) => {
     skipNow();
@@ -63,12 +71,15 @@ export function Terminal() {
             booting={booting}
             sound={sound}
             theme={theme}
+            lang={lang}
             onToggleSound={toggleSound}
             onToggleTheme={() => runCommand("theme")}
+            onToggleLang={() => runCommand("lang")}
           />
           <div className="term" ref={termRef} onClick={focusInput}>
             <BootLog bootLines={bootLines} booting={booting} />
             <HistoryView history={history} />
+            {booting ? null : <LangHint />}
           </div>
           {booting ? null : <CommandPalette playKey={playKey} />}
           <InputLine

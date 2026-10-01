@@ -1,18 +1,18 @@
 import type { StaticImageData } from "next/image";
-import perdomoWarehouses from "../../public/assets/perdomo-warehouses.png";
-import perdomoInventory from "../../public/assets/perdomo-inventory.png";
-import perdomoReceiving from "../../public/assets/perdomo-receiving.png";
-import billrootInvoices from "../../public/assets/billroot-invoices.png";
-import billrootRecurring from "../../public/assets/billroot-recurring.png";
-import billrootDetail from "../../public/assets/billroot-detail.png";
-import billrootEdit from "../../public/assets/billroot-edit.png";
+import perdomoWarehouses from "../../public/assets/perdomo-warehouses.webp";
+import perdomoInventory from "../../public/assets/perdomo-inventory.webp";
+import perdomoReceiving from "../../public/assets/perdomo-receiving.webp";
+import billrootInvoices from "../../public/assets/billroot-invoices.webp";
+import billrootRecurring from "../../public/assets/billroot-recurring.webp";
+import billrootDetail from "../../public/assets/billroot-detail.webp";
+import billrootEdit from "../../public/assets/billroot-edit.webp";
 
 export const SCREENSHOTS: Record<string, StaticImageData> = {
-  "assets/perdomo-warehouses.png": perdomoWarehouses,
-  "assets/perdomo-inventory.png": perdomoInventory,
-  "assets/perdomo-receiving.png": perdomoReceiving,
-  "assets/billroot-invoices.png": billrootInvoices,
-  "assets/billroot-recurring.png": billrootRecurring,
-  "assets/billroot-detail.png": billrootDetail,
-  "assets/billroot-edit.png": billrootEdit,
+  "assets/perdomo-warehouses.webp": perdomoWarehouses,
+  "assets/perdomo-inventory.webp": perdomoInventory,
+  "assets/perdomo-receiving.webp": perdomoReceiving,
+  "assets/billroot-invoices.webp": billrootInvoices,
+  "assets/billroot-recurring.webp": billrootRecurring,
+  "assets/billroot-detail.webp": billrootDetail,
+  "assets/billroot-edit.webp": billrootEdit,
 };

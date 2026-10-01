@@ -1,13 +1,17 @@
+"use client";
+
 import { OutputBlock } from "@/components/outputs/OutputBlock";
 import { Heading } from "@/components/outputs/Heading";
-import { portfolio } from "@/lib/portfolio";
-
-const { education } = portfolio;
+import { usePortfolio } from "@/hooks/usePortfolio";
+import { useMessages } from "@/hooks/useMessages";
 
 export function Education() {
+  const { education } = usePortfolio();
+  const t = useMessages();
+
   return (
     <OutputBlock>
-      <Heading>education</Heading>
+      <Heading>{t.headings.education}</Heading>
       <div className="row">
         <span className="b">{education.degree}</span>
       </div>

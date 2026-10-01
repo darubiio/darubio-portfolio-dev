@@ -2,7 +2,7 @@
 
 import { useState, type KeyboardEvent, type RefObject } from "react";
 import { Prompt } from "@/components/terminal/Prompt";
-import { AUTOCOMPLETE } from "@/lib/commands";
+import { ghostCompletion } from "@/lib/commands";
 import type { useCommandHistory } from "@/hooks/useCommandHistory";
 
 interface InputLineProps {
@@ -17,9 +17,16 @@ export function InputLine({ inputRef, run, clear, playKey, commandHistory }: Inp
   const [value, setValue] = useState("");
   const [focused, setFocused] = useState(true);
 
+  const ghost = ghostCompletion(value);
+
   const submit = () => {
     run(value);
     setValue("");
+  };
+
+  const atLineEnd = (event: KeyboardEvent<HTMLInputElement>) => {
+    const el = event.currentTarget;
+    return el.selectionStart === value.length && el.selectionEnd === value.length;
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -28,6 +35,12 @@ export function InputLine({ inputRef, run, clear, playKey, commandHistory }: Inp
     if (event.key === "Enter") {
       event.preventDefault();
       submit();
+      return;
+    }
+    // Accept the ghost completion with → / End when the caret is at the line end.
+    if ((event.key === "ArrowRight" || event.key === "End") && ghost && atLineEnd(event)) {
+      event.preventDefault();
+      setValue(ghost);
       return;
     }
     if (event.key === "ArrowUp") {
@@ -44,8 +57,7 @@ export function InputLine({ inputRef, run, clear, playKey, commandHistory }: Inp
     }
     if (event.key === "Tab") {
       event.preventDefault();
-      const match = value && AUTOCOMPLETE.find((command) => command.startsWith(value.toLowerCase()));
-      if (match) setValue(match);
+      if (ghost) setValue(ghost);
       return;
     }
     if (event.key === "l" && event.ctrlKey) {
@@ -67,6 +79,7 @@ export function InputLine({ inputRef, run, clear, playKey, commandHistory }: Inp
         {value}
       </span>
       <span className="bcaret" />
+      {ghost ? <span className="cmd-ghost">{ghost.slice(value.length)}</span> : null}
       <input
         ref={inputRef}
         value={value}

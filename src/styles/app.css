@@ -210,6 +210,43 @@ body {
 .tb-btn.active {
   color: var(--accent);
 }
+.tb-lang {
+  width: auto;
+  padding: 0 7px;
+  gap: 3px;
+  font-size: 10.5px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+.tb-lang .sep {
+  opacity: 0.4;
+}
+.tb-lang .on {
+  color: var(--accent);
+}
+
+.lang-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.lang-hint-x {
+  margin-left: 2px;
+  padding: 0 5px;
+  cursor: pointer;
+  color: var(--dim);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1;
+}
+.lang-hint-x:hover {
+  color: var(--fg-bright);
+  background: var(--border);
+}
 
 .term {
   flex: 1 1 auto;
@@ -615,6 +652,35 @@ button.link:hover {
   padding: 0 16px 14px;
 }
 
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.stat-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--glass-2);
+  padding: 14px 16px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.stat-card:hover {
+  border-color: color-mix(in oklab, var(--accent) 35%, var(--border));
+  transform: translateY(-2px);
+}
+.stat-value {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: clamp(18px, 2.4vw, 24px);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.stat-label {
+  color: var(--dim);
+  font-size: 11.5px;
+  margin-top: 6px;
+}
+
 .skill-grp {
   margin-bottom: 12px;
 }
@@ -756,6 +822,15 @@ button.link:hover {
   animation: none;
   opacity: 0.35;
 }
+.cmd-ghost {
+  font-size: 13.5px;
+  color: var(--dim);
+  opacity: 0.6;
+  white-space: pre;
+  margin-left: -4px;
+  pointer-events: none;
+  user-select: none;
+}
 @keyframes blink {
   0%,
   50% {
@@ -854,6 +929,9 @@ button.link:hover {
   .proj-hi {
     grid-template-columns: 1fr;
   }
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
   .tl-period {
     margin-left: 0;
     width: 100%;
@@ -882,6 +960,12 @@ button.link:hover {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .blob {
+    animation: none !important;
+  }
+}
+/* ponytail: blobs static on small screens — animated blur + window backdrop-filter re-blurs every frame on mobile GPUs. */
+@media (max-width: 720px) {
   .blob {
     animation: none !important;
   }

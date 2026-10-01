@@ -85,9 +85,6 @@ export default function Home() {
             <a href={`mailto:${contact.email}`}>{contact.email}</a>
           </li>
           <li>
-            <a href={`tel:${contact.phone.replace(/\s/g, "")}`}>{contact.phone}</a>
-          </li>
-          <li>
             <a href={externalUrl(contact.linkedin)}>{contact.linkedin}</a>
           </li>
           <li>

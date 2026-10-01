@@ -1,6 +1,7 @@
 "use client";
 
 import { useTerminal } from "@/context/TerminalContext";
+import { useMessages } from "@/hooks/useMessages";
 
 interface PaletteButton {
   command: string;
@@ -21,6 +22,7 @@ const BUTTONS: ReadonlyArray<PaletteButton> = [
 
 export function CommandPalette({ playKey }: { playKey: () => void }) {
   const { run } = useTerminal();
+  const t = useMessages();
 
   const activate = (command: string) => {
     playKey();
@@ -33,7 +35,7 @@ export function CommandPalette({ playKey }: { playKey: () => void }) {
         <span className="status-pill">
           <span className="dot" />
         </span>{" "}
-        not a terminal person? just click ↓
+        {t.palette.hint}
       </div>
       <div className="cmd-row">
         {BUTTONS.map(({ command, icon, variant }) => (

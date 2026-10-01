@@ -4,7 +4,7 @@ export const portfolio: Portfolio = {
   identity: {
     name: "Daniel Rubio",
     fullName: "Daniel Alejandro Rubio Linares",
-    role: "Senior Software Engineer",
+    role: "Software Engineer",
     stack: "React · TypeScript · Next.js · Node.js",
     location: "Madrid, Spain",
     tagline: "6+ years shipping full-stack systems to production.",
@@ -20,6 +20,13 @@ export const portfolio: Portfolio = {
     "",
     "I like the boring parts: reliability, observability, and code that the",
     "on-call engineer (sometimes me) doesn't curse at 3am. // 99.9% uptime, 0.1% luck",
+  ],
+
+  stats: [
+    { value: "6+ yrs", label: "shipping to production" },
+    { value: "1M+/day", label: "trips handled in prod · M-30" },
+    { value: "8+", label: "warehouses, real-time stock" },
+    { value: "banking", label: "transport · logistics · finance" },
   ],
 
   experience: [
@@ -108,9 +115,9 @@ export const portfolio: Portfolio = {
       ],
       stack: ["Next.js", "Redis", "Zoho API", "PWA", "OAuth 2.0", "CASL"],
       shots: [
-        { src: "assets/perdomo-warehouses.png", cap: "Multi-warehouse dashboard" },
-        { src: "assets/perdomo-inventory.png", cap: "Cross-warehouse inventory matrix" },
-        { src: "assets/perdomo-receiving.png", cap: "Barcode-scan receiving flow" },
+        { src: "assets/perdomo-warehouses.webp", cap: "Multi-warehouse dashboard" },
+        { src: "assets/perdomo-inventory.webp", cap: "Cross-warehouse inventory matrix" },
+        { src: "assets/perdomo-receiving.webp", cap: "Barcode-scan receiving flow" },
       ],
       link: null,
     },
@@ -129,10 +136,10 @@ export const portfolio: Portfolio = {
       ],
       stack: ["Next.js", "TypeScript", "Node.js", "PostgreSQL", "Vercel"],
       shots: [
-        { src: "assets/billroot-invoices.png", cap: "Purchase invoices ledger" },
-        { src: "assets/billroot-recurring.png", cap: "Recurring charges forecast" },
-        { src: "assets/billroot-detail.png", cap: "Invoice detail panel" },
-        { src: "assets/billroot-edit.png", cap: "Editor + live PDF preview" },
+        { src: "assets/billroot-invoices.webp", cap: "Purchase invoices ledger" },
+        { src: "assets/billroot-recurring.webp", cap: "Recurring charges forecast" },
+        { src: "assets/billroot-detail.webp", cap: "Invoice detail panel" },
+        { src: "assets/billroot-edit.webp", cap: "Editor + live PDF preview" },
       ],
       link: "billroot.app",
     },
@@ -198,7 +205,6 @@ export const portfolio: Portfolio = {
 
   contact: {
     email: "darubiio97@icloud.com",
-    phone: "+34 698 925 539",
     location: "Madrid, Spain",
     linkedin: "linkedin.com/in/darubiio",
     github: "github.com/darubiio",

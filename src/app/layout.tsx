@@ -23,14 +23,17 @@ export const viewport: Viewport = {
 
 const themeScript = `(function(){try{var t=localStorage.getItem("rubio-theme")||"dark";document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();`;
 
+const langScript = `(function(){try{var l=localStorage.getItem("rubio-lang")==="es"?"es":"en";document.documentElement.setAttribute("lang",l);}catch(e){}})();`;
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" data-theme="dark" className={firaCode.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: langScript }} />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd()) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd()).replace(/</g, "\\u003c") }}
         />
       </head>
       <body>{children}</body>

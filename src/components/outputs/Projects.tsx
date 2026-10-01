@@ -1,13 +1,19 @@
+"use client";
+
 import { OutputBlock } from "@/components/outputs/OutputBlock";
 import { Heading } from "@/components/outputs/Heading";
 import { ProjectCard } from "@/components/outputs/ProjectCard";
-import { portfolio } from "@/lib/portfolio";
+import { usePortfolio } from "@/hooks/usePortfolio";
+import { useMessages } from "@/hooks/useMessages";
 
 export function Projects() {
+  const { projects } = usePortfolio();
+  const t = useMessages();
+
   return (
     <OutputBlock>
-      <Heading>featured projects</Heading>
-      {portfolio.projects.map((project) => (
+      <Heading>{t.headings.projects}</Heading>
+      {projects.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}
     </OutputBlock>

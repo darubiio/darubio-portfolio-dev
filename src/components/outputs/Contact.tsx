@@ -1,47 +1,46 @@
+"use client";
+
 import { OutputBlock } from "@/components/outputs/OutputBlock";
 import { Heading } from "@/components/outputs/Heading";
 import { ContactRow } from "@/components/outputs/ContactRow";
-import { portfolio } from "@/lib/portfolio";
+import { usePortfolio } from "@/hooks/usePortfolio";
+import { useMessages } from "@/hooks/useMessages";
 import { asset, externalUrl } from "@/lib/site";
 
-const { contact } = portfolio;
-
 export function Contact() {
+  const { contact } = usePortfolio();
+  const t = useMessages();
+
   return (
     <OutputBlock>
-      <Heading>contact</Heading>
+      <Heading>{t.headings.contact}</Heading>
       <div className="contact-list">
-        <ContactRow label="email">
+        <ContactRow label={t.contact.labels.email}>
           <a className="link" href={`mailto:${contact.email}`}>
             {contact.email}
           </a>
         </ContactRow>
-        <ContactRow label="phone">
-          <a className="link" href={`tel:${contact.phone.replace(/\s/g, "")}`}>
-            {contact.phone}
-          </a>
-        </ContactRow>
-        <ContactRow label="location">
+        <ContactRow label={t.contact.labels.location}>
           <span className="str">{contact.location}</span>
         </ContactRow>
-        <ContactRow label="linkedin">
+        <ContactRow label={t.contact.labels.linkedin}>
           <a className="link" href={externalUrl(contact.linkedin)} target="_blank" rel="noreferrer">
             {contact.linkedin}
           </a>
         </ContactRow>
-        <ContactRow label="github">
+        <ContactRow label={t.contact.labels.github}>
           <a className="link" href={externalUrl(contact.github)} target="_blank" rel="noreferrer">
             {contact.github}
           </a>
         </ContactRow>
-        <ContactRow label="resume">
+        <ContactRow label={t.contact.labels.resume}>
           <a className="link" href={asset(contact.cv)} download>
-            download CV (.pdf)
+            {t.contact.downloadCv}
           </a>
         </ContactRow>
       </div>
       <div className="row cmt" style={{ marginTop: 10 }}>
-        {"// I usually reply faster than CI on a Monday morning."}
+        {t.contact.replyNote}
       </div>
     </OutputBlock>
   );

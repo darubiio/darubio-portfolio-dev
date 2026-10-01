@@ -72,7 +72,6 @@ export function jsonLd() {
         description,
         url: SITE_URL,
         email: `mailto:${contact.email}`,
-        telephone: contact.phone,
         address: {
           "@type": "PostalAddress",
           addressLocality: "Madrid",

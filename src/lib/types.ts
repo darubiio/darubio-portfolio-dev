@@ -61,9 +61,13 @@ export interface Language {
   pct: number;
 }
 
+export interface Stat {
+  value: string;
+  label: string;
+}
+
 export interface Contact {
   email: string;
-  phone: string;
   location: string;
   linkedin: string;
   github: string;
@@ -73,6 +77,7 @@ export interface Contact {
 export interface Portfolio {
   identity: Identity;
   about: string[];
+  stats: Stat[];
   experience: ExperienceEntry[];
   projects: Project[];
   skills: SkillGroup[];

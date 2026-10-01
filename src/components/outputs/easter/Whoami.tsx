@@ -1,12 +1,18 @@
+"use client";
+
 import { OutputBlock } from "@/components/outputs/OutputBlock";
-import { portfolio } from "@/lib/portfolio";
+import { usePortfolio } from "@/hooks/usePortfolio";
+import { useMessages } from "@/hooks/useMessages";
 
 export function Whoami() {
+  const { identity } = usePortfolio();
+  const t = useMessages();
+
   return (
     <OutputBlock>
       <div className="row">
-        <span className="str">{portfolio.identity.handle}</span>{" "}
-        <span className="cmt">{"// just a dev who likes shipping things that stay shipped."}</span>
+        <span className="str">{identity.handle}</span>{" "}
+        <span className="cmt">{t.easter.whoami}</span>
       </div>
     </OutputBlock>
   );

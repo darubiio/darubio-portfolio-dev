@@ -2,17 +2,14 @@
 
 import { useState } from "react";
 import { OutputBlock } from "@/components/outputs/OutputBlock";
-
-const JOKES = [
-  "There are 10 kinds of people: those who read binary and those who don't.",
-  "It works on my machine. ¯\\_(ツ)_/¯  Ship the laptop then.",
-  "A SQL query walks into a bar, sees two tables and asks: 'Can I JOIN you?'",
-  "Why do Java devs wear glasses? Because they don't C#.",
-  "99 little bugs in the code, take one down, patch it around... 127 little bugs in the code.",
-];
+import { useMessages } from "@/hooks/useMessages";
 
 export function Joke() {
-  const [joke] = useState(() => JOKES[Math.floor(Math.random() * JOKES.length)]);
+  const t = useMessages();
+  // Pick an index once on mount; the message lookup stays reactive to language.
+  const [index] = useState(() => Math.floor(Math.random() * t.easter.jokes.length));
+  const joke = t.easter.jokes[index] ?? t.easter.jokes[0];
+
   return (
     <OutputBlock>
       <div className="row str">{joke}</div>

@@ -19,7 +19,7 @@ const colors = {
 };
 
 export default function OpengraphImage() {
-  const { identity } = portfolio;
+  const { identity, stats } = portfolio;
 
   return new ImageResponse(
     (
@@ -74,7 +74,15 @@ export default function OpengraphImage() {
               {identity.name}
             </div>
             <div style={{ display: "flex", fontSize: 40, color: colors.blue, marginTop: 14 }}>{identity.role}</div>
-            <div style={{ display: "flex", fontSize: 28, color: colors.green, marginTop: 24 }}>{identity.stack}</div>
+            <div style={{ display: "flex", fontSize: 28, color: colors.green, marginTop: 20 }}>{identity.stack}</div>
+            <div style={{ display: "flex", gap: 40, marginTop: 36 }}>
+              {stats.map((stat) => (
+                <div key={stat.label} style={{ display: "flex", flexDirection: "column" }}>
+                  <span style={{ fontSize: 34, fontWeight: 700, color: colors.blue }}>{stat.value}</span>
+                  <span style={{ fontSize: 18, color: colors.dim, marginTop: 6 }}>{stat.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div
