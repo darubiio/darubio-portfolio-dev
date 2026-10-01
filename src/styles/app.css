@@ -379,6 +379,7 @@ body {
   display: flex;
   gap: 6px;
   align-items: center;
+  margin-left: auto;
 }
 .tb-btn {
   display: inline-flex;
@@ -559,8 +560,12 @@ body {
 a.link {
   color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px dotted currentColor;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
   cursor: pointer;
+}
+a.link {
+  padding-block: 8px; /* inline: no layout change, larger touch target */
 }
 a.link:hover {
   filter: brightness(1.2);
@@ -570,10 +575,11 @@ button.link {
   font-size: inherit;
   background: none;
   border: none;
-  padding: 0;
+  padding: 8px 0; /* inline: no layout change, larger touch target */
   color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px dotted currentColor;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
   cursor: pointer;
 }
 button.link:hover {
@@ -1122,6 +1128,24 @@ button.link:hover {
   animation: fade 0.2s ease both;
   cursor: zoom-out;
 }
+.lightbox-close {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
+.lightbox-close:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
 .lightbox.show {
   display: flex;
 }
@@ -1174,6 +1198,9 @@ button.link:hover {
   }
   .titlebar .title {
     display: none;
+  }
+  .stat-label {
+    -webkit-line-clamp: 3;
   }
   .bar-wrap {
     grid-template-columns: 92px 1fr auto;

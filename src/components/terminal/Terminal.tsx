@@ -40,7 +40,13 @@ export function Terminal() {
   const shell = useTerminalShell({ theme, setTheme, lang, setLang });
   const { history, run, clear, showWelcome, matrixActive, exitMatrix, commandHistory } = shell;
 
-  const focusInput = () => inputRef.current?.focus();
+  // On touch devices focusing the input pops the virtual keyboard, so only the
+  // input bar itself (or a real command) may focus it; pointer devices keep the
+  // "click anywhere to type" behaviour.
+  const focusInput = () => {
+    if (matchMedia("(hover: none)").matches) return;
+    inputRef.current?.focus();
+  };
 
   const onReady = () => {
     const initial = readInitialCommand();

@@ -34,7 +34,14 @@ export function Lightbox({ image, onClose }: LightboxProps) {
       aria-label="Project screenshot"
       aria-hidden={image ? undefined : true}
     >
-      {image ? <Image src={image} alt="Project screenshot" sizes="100vw" placeholder="blur" /> : null}
+      {image ? (
+        <>
+          <button type="button" className="lightbox-close" aria-label="Close" onClick={onClose}>
+            ✕
+          </button>
+          <Image src={image} alt="Project screenshot" sizes="100vw" placeholder="blur" />
+        </>
+      ) : null}
     </div>
   );
 }
