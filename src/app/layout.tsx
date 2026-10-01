@@ -21,7 +21,7 @@ export const viewport: Viewport = {
   ],
 };
 
-const themeScript = `(function(){try{var t=localStorage.getItem("rubio-theme")||"dark";document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();`;
+const themeScript = `(function(){try{var t=localStorage.getItem("rubio-theme")||"dark";document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}if(navigator.userAgentData)document.documentElement.classList.add("lg");})();`;
 
 const langScript = `(function(){try{var l=localStorage.getItem("rubio-lang")==="es"?"es":"en";document.documentElement.setAttribute("lang",l);}catch(e){}})();`;
 

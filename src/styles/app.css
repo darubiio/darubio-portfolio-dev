@@ -117,6 +117,7 @@ body {
   padding: clamp(10px, 3vh, 40px) clamp(10px, 3vw, 48px);
 }
 .window {
+  position: relative;
   width: min(1040px, 100%);
   height: min(760px, 100%);
   max-height: 100%;
@@ -125,12 +126,34 @@ body {
   flex-direction: column;
   background: var(--glass);
   backdrop-filter: blur(26px) saturate(150%);
-  -webkit-backdrop-filter: blur(26px) saturate(150%);
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow: var(--shadow);
   overflow: hidden;
   transition: background 0.5s ease, border-color 0.5s ease;
+}
+/* Liquid glass: rim light (static paint, ~free) */
+.window::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 5;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.28),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 24px rgba(255, 255, 255, 0.05);
+}
+[data-theme="light"] .window::after {
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.9),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 0 24px rgba(255, 255, 255, 0.18);
+}
+/* Liquid glass: edge refraction via SVG displacement map — Chromium only (html.lg set in layout.tsx). */
+.lg .window {
+  backdrop-filter: url(#lg) blur(12px) saturate(160%);
 }
 
 .titlebar {
@@ -968,5 +991,11 @@ button.link:hover {
 @media (max-width: 720px) {
   .blob {
     animation: none !important;
+  }
+}
+/* No refraction on small screens: full-window displacement per frame is too costly on mobile GPUs. */
+@media (max-width: 720px) {
+  .lg .window {
+    backdrop-filter: blur(18px) saturate(150%);
   }
 }
