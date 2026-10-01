@@ -28,7 +28,7 @@ function facts(lang: Lang): string {
     `LOCATION: ${identity.location}`,
     `STATUS: ${identity.status.label}`,
     `SUMMARY: ${about.filter(Boolean).join(" ")}`,
-    `HEADLINE STATS: ${stats.map((s) => `${s.value} ${s.label}`).join(" · ")}`,
+    `HEADLINE STATS: ${stats.map((s) => `${s.value} ${s.unit} — ${s.label}`).join(" · ")}`,
     `EXPERIENCE:\n${exp}`,
     `PROJECTS:\n${proj}`,
     `SKILLS: ${sk}`,

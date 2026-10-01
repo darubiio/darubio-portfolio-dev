@@ -78,7 +78,7 @@ export default function OpengraphImage() {
             <div style={{ display: "flex", gap: 40, marginTop: 36 }}>
               {stats.map((stat) => (
                 <div key={stat.label} style={{ display: "flex", flexDirection: "column" }}>
-                  <span style={{ fontSize: 34, fontWeight: 700, color: colors.blue }}>{stat.value}</span>
+                  <span style={{ fontSize: 34, fontWeight: 700, color: colors.blue }}>{stat.value} {stat.unit}</span>
                   <span style={{ fontSize: 18, color: colors.dim, marginTop: 6 }}>{stat.label}</span>
                 </div>
               ))}

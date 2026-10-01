@@ -1,3 +1,5 @@
+import type { CommandName } from "@/lib/commands";
+
 export interface Status {
   open: boolean;
   label: string;
@@ -62,8 +64,14 @@ export interface Language {
 }
 
 export interface Stat {
+  /** The number, e.g. "1M+". */
   value: string;
+  /** The noun that makes the number readable, e.g. "trips/day". */
+  unit: string;
+  /** Where / context, one short sentence. */
   label: string;
+  /** Command that shows the evidence behind the number. */
+  cmd: CommandName;
 }
 
 export interface Contact {

@@ -24,10 +24,10 @@ export const portfolio: Portfolio = {
   ],
 
   stats: [
-    { value: "6+ yrs", label: "shipping to production" },
-    { value: "1M+/day", label: "trips handled in prod · M-30" },
-    { value: "8+", label: "warehouses, real-time stock" },
-    { value: "banking", label: "transport · logistics · finance" },
+    { value: "6+", unit: "years", label: "in production · banking, transport and logistics", cmd: "experience" },
+    { value: "1M+", unit: "trips/day", label: "M-30 tunnels, Madrid · traffic-control software", cmd: "experience" },
+    { value: "8", unit: "warehouses", label: "real-time stock · PWA on Zoho Inventory", cmd: "projects" },
+    { value: "3", unit: "critical sectors", label: "banking · transport · logistics", cmd: "experience" },
   ],
 
   experience: [

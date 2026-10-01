@@ -132,10 +132,10 @@ export const portfolioEs: Portfolio = {
   ],
 
   stats: [
-    { value: "6+ años", label: "llevando a producción" },
-    { value: "1M+/día", label: "viajes gestionados en prod · M-30" },
-    { value: "8+", label: "almacenes, stock en tiempo real" },
-    { value: "banca", label: "transporte · logística · finanzas" },
+    { value: "6+", unit: "años", label: "en producción · banca, transporte y logística", cmd: "experience" },
+    { value: "1M+", unit: "viajes/día", label: "túneles de la M-30, Madrid · control de tráfico", cmd: "experience" },
+    { value: "8", unit: "almacenes", label: "stock en tiempo real · PWA sobre Zoho Inventory", cmd: "projects" },
+    { value: "3", unit: "sectores críticos", label: "banca · transporte · logística", cmd: "experience" },
   ],
 
   experience: en.experience.map((entry, i) => ({

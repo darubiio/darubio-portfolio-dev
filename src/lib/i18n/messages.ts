@@ -43,6 +43,7 @@ export interface Messages {
     location: string;
     status: string;
   };
+  stats: { see: string };
   share: { intro: string; copy: string; copied: string };
   ask: { thinking: string; unavailable: string };
   notfound: { notFound: string; tryPre: string; tryPost: string };
@@ -139,6 +140,7 @@ const en: Messages = {
     location: "Location",
     status: "Status",
   },
+  stats: { see: "view" },
   share: {
     intro: "// share this view — the URL deep-links straight back here",
     copy: "copy link",
@@ -253,6 +255,7 @@ const es: Messages = {
     location: "Lugar",
     status: "Estado",
   },
+  stats: { see: "ver" },
   share: {
     intro: "// comparte esta vista — la URL te trae de vuelta aquí directamente",
     copy: "copiar enlace",
