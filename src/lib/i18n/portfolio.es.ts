@@ -13,8 +13,8 @@ import { portfolio as en } from "@/lib/portfolio";
 const role = {
   "Software Engineer": "Ingeniero de Software",
   "IT Consultant": "Consultor IT",
-  "JavaScript Developer": "Desarrollador JavaScript",
-  "Developer Intern": "Becario de Desarrollo",
+  "Web Developer": "Desarrollador web",
+  "Junior JavaScript Developer": "Desarrollador JavaScript junior",
 } as const;
 
 const sector = {
@@ -28,26 +28,27 @@ const sector = {
 // Indexed by the English `experience` order.
 const experiencePoints: string[][] = [
   [
-    "Construí y mantuve UIs internas sobre una arquitectura de micro-frontends en React, integrando con APIs junto a equipos de backend e infraestructura.",
+    "Construyo y mantengo aplicaciones bancarias internas sobre una arquitectura de micro-frontends en React, integrando APIs REST y trabajando a diario con los equipos de backend e infraestructura para que la entrega sea fluida y segura.",
     "Diseñé y entregué plugins de frontend a medida para el portal de desarrolladores corporativo Backstage, mejorando el descubrimiento y la adopción de servicios internos.",
-    "Apliqué patrones de diseño, testing con Jest y CI/CD en entornos ágiles.",
+    "Responsable de la calidad del código en todo el ciclo de entrega: patrones de diseño, suites de tests con Jest y pipelines de CI/CD en un equipo ágil.",
   ],
   [
     "Diseñé y construí una PWA sobre Zoho Inventory que da a los operarios de almacén una UI optimizada para transferencias de inventario, preparación de envíos y recepción de mercancía con verificación por escaneo de códigos de barras.",
-    "Implementé sesiones colaborativas multi-turno respaldadas por Redis, control de acceso granular por almacén con CASL y autenticación OAuth 2.0 con Zoho.",
+    "Implementé sesiones colaborativas multi-turno respaldadas por Redis, control de acceso granular por almacén con CASL y autenticación OAuth 2.0 contra Zoho.",
     "Añadí escaneo y seguimiento por número de serie, habilitando trazabilidad a nivel de unidad en recepción, transferencias y picking.",
   ],
   [
-    "Desarrollo full-stack de sistemas críticos en tiempo real para la gestión y supervisión de tráfico en vías interurbanas y túneles, con altos requisitos de fiabilidad y disponibilidad.",
-    "Software actualmente en producción en los túneles de Calle 30 (M-30 Madrid) — la mayor red de túneles urbanos de Europa — gestionando más de 1M de viajes diarios.",
+    "Desarrollo full-stack de software de control de tráfico para autovías interurbanas y túneles, orientado a mejorar la gestión, la eficiencia y la seguridad vial bajo requisitos estrictos de fiabilidad y disponibilidad.",
+    "Sistemas de supervisión en tiempo real hoy en producción en los túneles de Calle 30 (M-30 Madrid) — la mayor red de túneles urbanos de Europa — gestionando más de 1M de viajes diarios.",
+    "Stack políglota: React, Redux y TypeScript en el front; servicios en Node.js, .NET y Go sobre PostgreSQL, MySQL y Redis.",
   ],
   [
-    "Construí plataformas web a medida para clientes de gestión, logística, fitness y hostelería.",
-    "Enfocado en el desarrollo y testing de componentes React, contribuyendo también al trabajo de servidor y a la gestión de bases de datos.",
+    "Entregué plataformas web a medida para clientes de gestión, logística, fitness y hostelería, desde el alcance hasta el lanzamiento, en remoto.",
+    "Desarrollé y testeé componentes React.js y contribuí al desarrollo de servidor y a la gestión de bases de datos.",
   ],
   [
-    "Primer rol profesional como desarrollador junior contribuyendo a proyectos web internos con JavaScript en un entorno corporativo.",
-    "Construí fundamentos de frontend y aprendí a trabajar dentro de equipos técnicos.",
+    "Construí interfaces de usuario para los servicios internos de la compañía con JavaScript, HTML5, CSS3 y Bootstrap.",
+    "Primer rol profesional: aprendí a entregar dentro de un equipo de ingeniería corporativo, de la revisión de código al despliegue.",
   ],
 ];
 
