@@ -10,9 +10,9 @@ import { TitleBar } from "@/components/terminal/TitleBar";
 import { BootLog } from "@/components/terminal/BootLog";
 import { HistoryView } from "@/components/terminal/HistoryView";
 import { CommandPalette } from "@/components/terminal/CommandPalette";
+import { Lightbox } from "@/components/terminal/Lightbox";
 import { LangHint } from "@/components/terminal/LangHint";
 import { InputLine } from "@/components/terminal/InputLine";
-import { Lightbox } from "@/components/terminal/Lightbox";
 import { readInitialCommand } from "@/lib/deeplink";
 import { useTheme } from "@/hooks/useTheme";
 import { useLang } from "@/hooks/useLang";
@@ -79,7 +79,7 @@ export function Terminal() {
             onToggleLang={() => runCommand("lang")}
           />
           <div className="term" ref={termRef} onClick={focusInput}>
-            <BootLog bootLines={bootLines} booting={booting} />
+            <BootLog bootLines={bootLines} lines={t.boot} booting={booting} />
             <HistoryView history={history} />
             {booting ? null : <LangHint />}
           </div>

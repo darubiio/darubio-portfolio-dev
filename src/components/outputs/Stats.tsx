@@ -19,7 +19,6 @@ export function Stats() {
             className="stat-card"
             key={stat.unit}
             onClick={() => run(stat.cmd)}
-            aria-label={`${stat.value} ${stat.unit} — ${stat.label}. ${t.stats.see} ${stat.cmd}`}
           >
             <span className="stat-see" aria-hidden>
               ↳ {stat.cmd}
@@ -29,6 +28,9 @@ export function Stats() {
               <span className="stat-unit">{stat.unit}</span>
             </div>
             <div className="stat-label">{stat.label}</div>
+            <span className="sr-only">
+              — {t.stats.see} {stat.cmd}
+            </span>
           </button>
         ))}
       </div>

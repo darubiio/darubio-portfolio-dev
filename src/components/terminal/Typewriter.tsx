@@ -53,7 +53,15 @@ export function Typewriter({ text, speed = 26, delay = 120, className }: Typewri
 
   const typing = shown < text.length;
 
+  // The untyped remainder is laid out invisibly so the line keeps its final size (no layout shift).
   return (
-    <span className={typing ? `${className ?? ""} type-caret`.trim() : className}>{text.slice(0, shown)}</span>
+    <span className={className}>
+      <span className={typing ? "type-caret" : undefined}>{text.slice(0, shown)}</span>
+      {typing ? (
+        <span aria-hidden style={{ visibility: "hidden" }}>
+          {text.slice(shown)}
+        </span>
+      ) : null}
+    </span>
   );
 }

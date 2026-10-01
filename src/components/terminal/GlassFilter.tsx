@@ -17,8 +17,16 @@ import { useLayoutEffect, useRef, type RefObject } from "react";
 const BEZEL = 32;
 const RADIUS = 16; // keep in sync with .window border-radius
 const SCALE = -72; // negative = sample inward → convex lens (edges magnify)
+// The map is built at half resolution and upscaled by feImage: the bezel is a
+// smooth gradient, so nothing is lost, and PNG encoding (the costly part) is 4× cheaper.
+const MAP_SCALE = 0.5;
+const SMALL_SCREEN = "(max-width: 720px)"; // refraction is off there (app.css)
 
-function buildMap(w: number, h: number): string {
+function buildMap(cssW: number, cssH: number): string {
+  const w = Math.ceil(cssW * MAP_SCALE);
+  const h = Math.ceil(cssH * MAP_SCALE);
+  const bezel = BEZEL * MAP_SCALE;
+  const radius = RADIUS * MAP_SCALE;
   const canvas = document.createElement("canvas");
   canvas.width = w;
   canvas.height = h;
@@ -31,14 +39,14 @@ function buildMap(w: number, h: number): string {
   const hh = h / 2;
   // Signed distance to the rounded box: < 0 inside.
   const sdf = (x: number, y: number) => {
-    const qx = Math.abs(x) - (hw - RADIUS);
-    const qy = Math.abs(y) - (hh - RADIUS);
-    return Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - RADIUS;
+    const qx = Math.abs(x) - (hw - radius);
+    const qy = Math.abs(y) - (hh - radius);
+    return Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - radius;
   };
   const paint = (i: number, j: number) => {
     const x = i + 0.5 - hw;
     const y = j + 0.5 - hh;
-    const t = Math.min(Math.max(-sdf(x, y) / BEZEL, 0), 1);
+    const t = Math.min(Math.max(-sdf(x, y) / bezel, 0), 1);
     const m = 1 - Math.pow(1 - Math.pow(1 - t, 4), 0.25); // convex squircle: 1 at edge → 0
     if (m <= 0) return;
     let nx = sdf(x + 0.5, y) - sdf(x - 0.5, y);
@@ -50,10 +58,13 @@ function buildMap(w: number, h: number): string {
     d[o] = Math.round(128 + nx * m * 127);
     d[o + 1] = Math.round(128 + ny * m * 127);
   };
+  const b = Math.ceil(bezel);
   for (let j = 0; j < h; j += 1) {
-    const band = j < BEZEL || j >= h - BEZEL;
-    for (let i = 0; i < w; i += 1) {
-      if (band || i < BEZEL || i >= w - BEZEL) paint(i, j);
+    if (j < b || j >= h - b) {
+      for (let i = 0; i < w; i += 1) paint(i, j);
+    } else {
+      for (let i = 0; i < b; i += 1) paint(i, j);
+      for (let i = w - b; i < w; i += 1) paint(i, j);
     }
   }
   ctx.putImageData(image, 0, 0);
@@ -69,9 +80,11 @@ export function GlassFilter({ target }: { target: RefObject<HTMLElement | null> 
     const filter = filterRef.current;
     const image = imageRef.current;
     if (!el || !filter || !image || !document.documentElement.classList.contains("lg")) return;
+    const small = matchMedia(SMALL_SCREEN);
 
     let frame = 0;
     const sync = () => {
+      if (small.matches) return; // no refraction on small screens: don't pay for the map
       const w = el.offsetWidth;
       const h = el.offsetHeight;
       for (const node of [filter, image]) {
@@ -80,7 +93,7 @@ export function GlassFilter({ target }: { target: RefObject<HTMLElement | null> 
       }
       image.setAttribute("href", buildMap(w, h));
     };
-    sync();
+    // No manual first call: ResizeObserver always fires once on observe (before paint).
     const observer = new ResizeObserver(() => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(sync);
@@ -103,7 +116,7 @@ export function GlassFilter({ target }: { target: RefObject<HTMLElement | null> 
         y="0"
         colorInterpolationFilters="sRGB"
       >
-        <feImage ref={imageRef} x="0" y="0" result="map" />
+        <feImage ref={imageRef} x="0" y="0" preserveAspectRatio="xMidYMid slice" result="map" />
         <feDisplacementMap in="SourceGraphic" in2="map" scale={SCALE} xChannelSelector="R" yChannelSelector="G" />
       </filter>
     </svg>

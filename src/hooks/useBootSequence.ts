@@ -25,7 +25,9 @@ function markBooted(): void {
 }
 
 export function useBootSequence(onReady: () => void, boot: readonly BootLine[]) {
-  const [bootLines, setBootLines] = useState<readonly BootLine[]>([]);
+  // The first line is part of the server HTML, so the terminal paints real content
+  // before hydration (it is the LCP element on slow devices).
+  const [bootLines, setBootLines] = useState<readonly BootLine[]>(() => boot.slice(0, 1));
   const [booting, setBooting] = useState(true);
   const skipRef = useRef(false);
   const readyRef = useRef(false);
@@ -54,17 +56,21 @@ export function useBootSequence(onReady: () => void, boot: readonly BootLine[]) 
     window.addEventListener("keydown", onSkip);
     window.addEventListener("pointerdown", onSkip);
 
+    // Small screens get a 2× faster boot: the welcome banner is the LCP element and
+    // phones have less headroom before the 2.5 s threshold.
+    const speed = matchMedia("(max-width: 720px)").matches ? 0.5 : 1;
+
     void (async () => {
       const lines = bootRef.current;
-      await sleep(120);
-      for (let k = 0; k < lines.length; k += 1) {
+      await sleep(120 * speed);
+      for (let k = 1; k < lines.length; k += 1) {
         if (cancelled) return;
         if (skipRef.current) break;
         setBootLines(lines.slice(0, k + 1));
-        await sleep(70 + Math.random() * 60);
+        await sleep((70 + Math.random() * 60) * speed);
       }
       if (cancelled) return;
-      await sleep(skipRef.current ? 80 : 160);
+      await sleep((skipRef.current ? 80 : 160) * speed);
       if (cancelled) return;
       finish();
     })();

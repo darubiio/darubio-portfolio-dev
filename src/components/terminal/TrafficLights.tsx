@@ -7,9 +7,15 @@ export function TrafficLights() {
 
   return (
     <div className="lights">
-      <button type="button" className="light r" title="exit" aria-label="Clear screen" onClick={() => run("clear")} />
-      <button type="button" className="light y" title="theme" aria-label="Toggle theme" onClick={() => run("theme")} />
-      <button type="button" className="light g" title="neofetch" aria-label="Run neofetch" onClick={() => run("neofetch")} />
+      <button type="button" className="light r" title="clear" onClick={() => run("clear")}>
+        <span className="sr-only">Clear screen</span>
+      </button>
+      <button type="button" className="light y" title="theme" onClick={() => run("theme")}>
+        <span className="sr-only">Toggle theme</span>
+      </button>
+      <button type="button" className="light g" title="neofetch" onClick={() => run("neofetch")}>
+        <span className="sr-only">Run neofetch</span>
+      </button>
     </div>
   );
 }

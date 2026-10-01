@@ -19,25 +19,28 @@ export function TitleBarActions({ sound, theme, lang, onToggleSound, onToggleThe
         type="button"
         className="tb-btn tb-lang"
         title={lang === "en" ? "cambiar a español" : "switch to English"}
-        aria-label={lang === "en" ? "Switch language to Spanish" : "Switch language to English"}
         onClick={onToggleLang}
       >
-        <span className={lang === "en" ? "on" : undefined}>EN</span>
-        <span className="sep">/</span>
-        <span className={lang === "es" ? "on" : undefined}>ES</span>
+        <span aria-hidden>
+          <span className={lang === "en" ? "on" : undefined}>EN</span>
+          <span className="sep">/</span>
+          <span className={lang === "es" ? "on" : undefined}>ES</span>
+        </span>
+        <span className="sr-only">{lang === "en" ? "Switch language to Spanish" : "Switch language to English"}</span>
       </button>
       <button
         type="button"
         className={sound ? "tb-btn active" : "tb-btn"}
         title="key sounds"
-        aria-label="Toggle key sounds"
         aria-pressed={sound}
         onClick={onToggleSound}
       >
-        {sound ? "♪" : "♪̶"}
+        <span aria-hidden>{sound ? "♪" : "♪̶"}</span>
+        <span className="sr-only">Toggle key sounds</span>
       </button>
-      <button type="button" className="tb-btn" title="toggle theme" aria-label="Toggle theme" onClick={onToggleTheme}>
-        {theme === "dark" ? "☾" : "☀"}
+      <button type="button" className="tb-btn" title="toggle theme" onClick={onToggleTheme}>
+        <span aria-hidden>{theme === "dark" ? "☾" : "☀"}</span>
+        <span className="sr-only">Toggle theme</span>
       </button>
     </div>
   );
