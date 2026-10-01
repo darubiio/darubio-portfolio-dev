@@ -6,8 +6,22 @@ import { Redis } from "@upstash/redis";
  * Fails SAFE: when Upstash isn't configured the route serves the canned
  * fallback in production rather than hitting the model unprotected.
  */
-const configured = Boolean(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
-const redis = configured ? Redis.fromEnv() : null;
+/**
+ * A missing or malformed env var (e.g. a rediss:// connection string instead of the
+ * https REST URL) must degrade to "unconfigured", never crash module evaluation —
+ * that would fail the whole build on Vercel.
+ */
+function createRedis(): Redis | null {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token || !url.startsWith("https://")) return null;
+  try {
+    return new Redis({ url, token });
+  } catch {
+    return null;
+  }
+}
+const redis = createRedis();
 
 const perMinute = redis
   ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5, "60 s"), prefix: "ask:min", analytics: false })
