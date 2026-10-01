@@ -47,62 +47,73 @@ body {
   background-size: 44px 44px;
   mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, #000 30%, transparent 78%);
 }
-.blob {
+/* Ambient background: one colour wash + three thin rings with a conic glow.
+   Every layer is pre-rasterised (gradients, no filter: blur) and animates
+   transform only, so motion is compositor-side. */
+.wash {
+  position: absolute;
+  left: 8vw;
+  top: -22vh;
+  width: 84vw;
+  height: 84vw;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--wash) 0%, transparent 70%);
+  will-change: transform;
+  animation: wash 46s ease-in-out infinite alternate;
+}
+.ring {
   position: absolute;
   border-radius: 50%;
-  filter: blur(70px);
-  opacity: 0.9;
+  border: 1px solid var(--ring-line);
   will-change: transform;
 }
-.blob.a {
-  width: 46vw;
-  height: 46vw;
-  background: var(--blob-a);
-  top: -10vh;
+.ring.r1 {
   left: -8vw;
-  animation: drift1 22s ease-in-out infinite;
+  top: 7vh;
+  width: 54vw;
+  height: 54vw;
+  border-width: 1.5px;
+  background: conic-gradient(from 20deg, transparent 0 62%, var(--glow-a) 76%, transparent 90%);
+  mask: radial-gradient(closest-side, transparent 0 calc(100% - 46px), #000 calc(100% - 44px));
+  animation: spin 90s linear infinite;
 }
-.blob.b {
-  width: 40vw;
-  height: 40vw;
-  background: var(--blob-b);
-  bottom: -14vh;
-  right: -6vw;
-  animation: drift2 26s ease-in-out infinite;
+.ring.r2 {
+  right: -14vw;
+  top: 33vh;
+  width: 62vw;
+  height: 62vw;
+  background: conic-gradient(from 200deg, transparent 0 55%, var(--glow-b) 70%, transparent 86%);
+  mask: radial-gradient(closest-side, transparent 0 calc(100% - 70px), #000 calc(100% - 68px));
+  animation: spin-back 140s linear infinite;
 }
-.blob.c {
-  width: 32vw;
-  height: 32vw;
-  background: var(--blob-c);
-  bottom: 10vh;
-  left: 30vw;
-  animation: drift3 30s ease-in-out infinite;
+.ring.r3 {
+  left: 36vw;
+  top: -36vh;
+  width: 39vw;
+  height: 39vw;
+  animation: spin 200s linear infinite;
 }
-@keyframes drift1 {
-  0%,
-  100% {
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 75% at 50% 50%, transparent 55%, var(--vignette) 100%);
+}
+@keyframes wash {
+  from {
     transform: translate(0, 0) scale(1);
   }
-  50% {
-    transform: translate(8vw, 6vh) scale(1.12);
+  to {
+    transform: translate(8vw, 6vh) scale(1.15);
   }
 }
-@keyframes drift2 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(-7vw, -5vh) scale(1.08);
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
-@keyframes drift3 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(5vw, -8vh) scale(0.92);
+@keyframes spin-back {
+  to {
+    transform: rotate(-360deg);
   }
 }
 
@@ -983,13 +994,15 @@ button.link:hover {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .blob {
+  .wash,
+  .ring {
     animation: none !important;
   }
 }
-/* ponytail: blobs static on small screens — animated blur + window backdrop-filter re-blurs every frame on mobile GPUs. */
+/* Small screens: freeze the ambient motion (battery) — refraction is off there anyway. */
 @media (max-width: 720px) {
-  .blob {
+  .wash,
+  .ring {
     animation: none !important;
   }
 }
