@@ -31,6 +31,12 @@ export function useAiStream(request: AiRequest): { status: AiStatus; text: strin
           body,
           signal: controller.signal,
         });
+        // 429 carries a friendly "give it a minute" message: show it instead of a generic error.
+        if (res.status === 429) {
+          setText(await res.text());
+          setStatus("done");
+          return;
+        }
         if (!res.ok) throw new Error(String(res.status));
         if (!res.body) {
           setText(await res.text());

@@ -42,7 +42,7 @@ const NAME = getPortfolio("en").identity.name;
 
 function languageRule(lang: Lang): string {
   return lang === "es"
-    ? "Always reply in Spanish (español), regardless of the language of the question."
+    ? "Always reply in Spanish (español), regardless of the language of the question. Spanish questions open with ¿ and close with ?."
     : "Reply in English unless the visitor clearly writes in another language, in which case match it.";
 }
 

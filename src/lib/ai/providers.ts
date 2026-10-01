@@ -12,7 +12,8 @@ const PROVIDERS: Record<ProviderName, ProviderConfig> = {
   groq: {
     baseURL: "https://api.groq.com/openai/v1",
     apiKey: process.env.GROQ_API_KEY,
-    model: process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile",
+    // llama-3.3-70b-versatile was retired by Groq; gpt-oss-120b is fast there and follows the trailer format well.
+    model: process.env.GROQ_MODEL ?? "openai/gpt-oss-120b",
   },
   openai: {
     apiKey: process.env.OPENAI_API_KEY,
@@ -44,7 +45,15 @@ export async function streamChat(
   if (!client) throw new Error("AI client not configured");
 
   const completion = await client.chat.completions.create(
-    { model: config.model, messages, stream: true, temperature: 0.3, max_tokens: maxTokens },
+    {
+      model: config.model,
+      messages,
+      stream: true,
+      temperature: 0.3,
+      max_tokens: maxTokens,
+      // gpt-oss models reason before answering; "low" keeps first-token latency short for a chat UI.
+      ...(config.model.includes("gpt-oss") ? { reasoning_effort: "low" as const } : {}),
+    },
     { signal },
   );
 
