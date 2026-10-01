@@ -1,4 +1,7 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { ImageResponse } from "next/og";
+import sharp from "sharp";
 import { portfolio } from "@/lib/portfolio";
 
 export const size = { width: 1200, height: 630 };
@@ -18,90 +21,203 @@ const colors = {
   cyan: "#56b6c2",
 };
 
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
   const { identity, stats } = portfolio;
+  // Generated at build time: the avatar is embedded as PNG (the OG renderer has no WebP support).
+  const avatar = await sharp(
+    await readFile(path.join(process.cwd(), "public/assets/avatar.webp")),
+  )
+    .resize(320, 320)
+    .png()
+    .toBuffer();
+  const avatarSrc = `data:image/png;base64,${avatar.toString("base64")}`;
 
   return new ImageResponse(
-    (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: colors.bg,
+        backgroundImage: `radial-gradient(circle at 18% 20%, rgba(97,175,239,0.22), transparent 45%), radial-gradient(circle at 85% 80%, rgba(198,120,221,0.18), transparent 45%)`,
+        fontFamily: "monospace",
+        padding: 64,
+      }}
+    >
       <div
         style={{
-          width: "100%",
-          height: "100%",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: colors.bg,
-          backgroundImage: `radial-gradient(circle at 18% 20%, rgba(97,175,239,0.22), transparent 45%), radial-gradient(circle at 85% 80%, rgba(198,120,221,0.18), transparent 45%)`,
-          fontFamily: "monospace",
-          padding: 64,
+          flex: 1,
+          border: `1px solid ${colors.border}`,
+          borderRadius: 20,
+          backgroundColor: colors.glass,
+          overflow: "hidden",
         }}
       >
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
+            alignItems: "center",
+            gap: 12,
+            padding: "20px 28px",
+            borderBottom: `1px solid ${colors.border}`,
+          }}
+        >
+          <div
+            style={{
+              width: 16,
+              height: 16,
+              borderRadius: 16,
+              backgroundColor: "#ff5f57",
+            }}
+          />
+          <div
+            style={{
+              width: 16,
+              height: 16,
+              borderRadius: 16,
+              backgroundColor: "#febc2e",
+            }}
+          />
+          <div
+            style={{
+              width: 16,
+              height: 16,
+              borderRadius: 16,
+              backgroundColor: "#28c840",
+            }}
+          />
+          <div style={{ marginLeft: 18, fontSize: 24, color: colors.dim }}>
+            — darubio@portfolio: ~ —
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            padding: "56px 64px",
             flex: 1,
-            border: `1px solid ${colors.border}`,
-            borderRadius: 20,
-            backgroundColor: colors.glass,
-            overflow: "hidden",
+            alignItems: "center",
+            gap: 56,
           }}
         >
           <div
             style={{
               display: "flex",
-              alignItems: "center",
-              gap: 12,
-              padding: "20px 28px",
-              borderBottom: `1px solid ${colors.border}`,
+              flexDirection: "column",
+              flex: 1,
+              minWidth: 0,
+              justifyContent: "center",
             }}
           >
-            <div style={{ width: 16, height: 16, borderRadius: 16, backgroundColor: "#ff5f57" }} />
-            <div style={{ width: 16, height: 16, borderRadius: 16, backgroundColor: "#febc2e" }} />
-            <div style={{ width: 16, height: 16, borderRadius: 16, backgroundColor: "#28c840" }} />
-            <div style={{ marginLeft: 18, fontSize: 24, color: colors.dim }}>— darubio@portfolio: ~ —</div>
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", padding: "56px 64px", flex: 1, justifyContent: "center" }}>
-            <div style={{ display: "flex", fontSize: 30, color: colors.dim, marginBottom: 18 }}>
+            <div
+              style={{
+                display: "flex",
+                fontSize: 30,
+                color: colors.dim,
+                marginBottom: 18,
+              }}
+            >
               <span style={{ color: colors.green }}>darubio</span>
               <span style={{ color: colors.dim }}>@</span>
               <span style={{ color: colors.purple }}>portfolio</span>
               <span style={{ color: colors.cyan, marginLeft: 14 }}>~</span>
               <span style={{ color: colors.blue, marginLeft: 14 }}>$</span>
-              <span style={{ color: colors.fgBright, marginLeft: 14 }}>whoami</span>
+              <span style={{ color: colors.fgBright, marginLeft: 14 }}>
+                whoami
+              </span>
             </div>
-            <div style={{ fontSize: 88, fontWeight: 700, color: colors.fgBright, letterSpacing: -2, lineHeight: 1.05 }}>
+            <div
+              style={{
+                fontSize: 88,
+                fontWeight: 700,
+                color: colors.fgBright,
+                letterSpacing: -2,
+                lineHeight: 1.05,
+              }}
+            >
               {identity.name}
             </div>
-            <div style={{ display: "flex", fontSize: 40, color: colors.blue, marginTop: 14 }}>{identity.role}</div>
-            <div style={{ display: "flex", fontSize: 28, color: colors.green, marginTop: 20 }}>{identity.stack}</div>
-            <div style={{ display: "flex", gap: 40, marginTop: 36 }}>
-              {stats.map((stat) => (
-                <div key={stat.label} style={{ display: "flex", flexDirection: "column" }}>
-                  <span style={{ fontSize: 34, fontWeight: 700, color: colors.blue }}>{stat.value} {stat.unit}</span>
-                  <span style={{ fontSize: 18, color: colors.dim, marginTop: 6 }}>{stat.label}</span>
-                </div>
+            <div
+              style={{
+                display: "flex",
+                fontSize: 40,
+                color: colors.blue,
+                marginTop: 14,
+              }}
+            >
+              {identity.role}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                fontSize: 28,
+                color: colors.green,
+                marginTop: 20,
+              }}
+            >
+              {identity.stack}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: 28,
+                marginTop: 34,
+                fontSize: 24,
+                color: colors.blue,
+              }}
+            >
+              {stats.map((stat, i) => (
+                <span key={stat.unit} style={{ display: "flex", gap: 28 }}>
+                  {i > 0 ? <span style={{ color: colors.dim }}>·</span> : null}
+                  <span>
+                    <span style={{ fontWeight: 700 }}>{stat.value}</span>
+                    <span style={{ marginLeft: 8 }}>{stat.unit}</span>
+                  </span>
+                </span>
               ))}
             </div>
           </div>
+          <img
+            src={avatarSrc}
+            width={260}
+            height={260}
+            alt=""
+            style={{
+              width: 260,
+              height: 260,
+              borderRadius: 40,
+              border: `2px solid ${colors.border}`,
+              objectFit: "cover",
+            }}
+          />
+        </div>
 
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            padding: "20px 28px",
+            borderTop: `1px solid ${colors.border}`,
+            fontSize: 24,
+            color: colors.dim,
+          }}
+        >
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              padding: "20px 28px",
-              borderTop: `1px solid ${colors.border}`,
-              fontSize: 24,
-              color: colors.dim,
+              width: 12,
+              height: 12,
+              borderRadius: 12,
+              backgroundColor: colors.green,
             }}
-          >
-            <div style={{ width: 12, height: 12, borderRadius: 12, backgroundColor: colors.green }} />
-            {identity.status.label} · {identity.location}
-          </div>
+          />
+          {identity.status.label} · {identity.location}
         </div>
       </div>
-    ),
+    </div>,
     size,
   );
 }

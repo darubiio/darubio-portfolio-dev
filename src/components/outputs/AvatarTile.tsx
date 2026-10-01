@@ -1,11 +1,11 @@
-import type { CSSProperties } from "react";
-import { AVATAR } from "@/lib/ascii";
+import Image from "next/image";
+import avatar from "../../../public/assets/avatar.webp";
+import { portfolio } from "@/lib/portfolio";
 
-export function AvatarTile({ size }: { size?: number }) {
-  const style: CSSProperties | undefined = size ? { width: size, height: size } : undefined;
+export function AvatarTile({ size = 96 }: { size?: number }) {
   return (
-    <div className="avatar" style={style} aria-hidden>
-      {AVATAR}
+    <div className="avatar" style={{ width: size, height: size }}>
+      <Image src={avatar} alt={portfolio.identity.fullName} width={size} height={size} sizes={`${size}px`} placeholder="blur" priority />
     </div>
   );
 }

@@ -71,6 +71,7 @@ export function jsonLd() {
         jobTitle: identity.role,
         description,
         url: SITE_URL,
+        image: `${SITE_URL}/assets/avatar.webp`,
         email: `mailto:${contact.email}`,
         address: {
           "@type": "PostalAddress",

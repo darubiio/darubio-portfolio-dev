@@ -640,13 +640,13 @@ button.link:hover {
   flex: 0 0 auto;
   border: 1px solid var(--border);
   background: var(--glass-2);
-  display: grid;
-  place-items: center;
-  color: var(--accent);
-  font-size: 9px;
-  line-height: 1.25;
-  white-space: pre;
   overflow: hidden;
+}
+.avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .about-meta div {
   margin: 1px 0;

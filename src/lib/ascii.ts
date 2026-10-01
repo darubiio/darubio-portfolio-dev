@@ -11,9 +11,4 @@ export const BANNER = `██████╗   █████╗  ███╗ 
 ██║  ██║ ╚██████╔╝ ██████╔╝ ██║ ╚██████╔╝
 ╚═╝  ╚═╝  ╚═════╝  ╚═════╝  ╚═╝  ╚═════╝`;
 
-export const AVATAR = ` ___
-[o,o]
-(_"_)
--"-"-`;
-
 export const MATRIX_GLYPHS = "01ﾊﾐﾋｰｳ｜ｸDANIELRUBIO<>[]{}/\\=+*";
