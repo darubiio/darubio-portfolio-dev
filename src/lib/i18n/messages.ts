@@ -179,12 +179,12 @@ const en: Messages = {
   langHint: { text: "// looks like you prefer Spanish — switch with ", cta: "lang es" },
   boot: [
     ["0.000000", "booting darubio@portfolio · kernel 1.0.0 · react 19.3 · next 16", ""],
-    ["0.142", "mounting /dev/experience ............", "ok"],
-    ["0.318", "loading react@19.2 .................", "ok"],
-    ["0.504", "decrypting projects.tar.gz ..........", "ok"],
-    ["0.731", "warming up fira-code ligatures ......", "ok"],
-    ["0.918", "negotiating coffee protocol .........", "warn"],
-    ["1.204", "starting interactive shell ..........", "ok"],
+    ["0.142", "mounting /dev/experience", "ok"],
+    ["0.318", "loading react@19.2", "ok"],
+    ["0.504", "decrypting projects.tar.gz", "ok"],
+    ["0.731", "warming up fira-code ligatures", "ok"],
+    ["0.918", "negotiating coffee protocol", "warn"],
+    ["1.204", "starting interactive shell", "ok"],
   ],
 };
 
@@ -294,12 +294,12 @@ const es: Messages = {
   langHint: { text: "// parece que prefieres español — cambia con ", cta: "lang es" },
   boot: [
     ["0.000000", "arrancando darubio@portfolio · kernel 1.0.0 · react 19.3 · next 16", ""],
-    ["0.142", "montando /dev/experience ...........", "ok"],
-    ["0.318", "cargando react@19.2 ................", "ok"],
-    ["0.504", "descifrando projects.tar.gz ........", "ok"],
-    ["0.731", "calentando ligaduras fira-code .....", "ok"],
-    ["0.918", "negociando protocolo del café ......", "warn"],
-    ["1.204", "iniciando shell interactiva ........", "ok"],
+    ["0.142", "montando /dev/experience", "ok"],
+    ["0.318", "cargando react@19.2", "ok"],
+    ["0.504", "descifrando projects.tar.gz", "ok"],
+    ["0.731", "calentando ligaduras fira-code", "ok"],
+    ["0.918", "negociando protocolo del café", "warn"],
+    ["1.204", "iniciando shell interactiva", "ok"],
   ],
 };
 

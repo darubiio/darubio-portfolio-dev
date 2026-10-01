@@ -12,7 +12,9 @@ function Line({ line, hidden }: { line: BootLine; hidden: boolean }) {
   const [timestamp, message, status] = line;
   return (
     <div className="boot-line row" style={hidden ? { visibility: "hidden" } : undefined} aria-hidden={hidden || undefined}>
-      <span className="ts">[{timestamp.padStart(8)}]</span> {message}{" "}
+      <span className="ts">[{timestamp.padStart(8)}]</span>
+      <span className="msg">{message}</span>
+      {status ? <span className="leader" aria-hidden /> : null}
       {status === "ok" ? <span className="ok">[ ok ]</span> : null}
       {status === "warn" ? <span className="warn">[warn]</span> : null}
     </div>

@@ -477,8 +477,31 @@ body {
 .out.boot-log {
   animation: none;
 }
-.boot-line {
+.row.boot-line {
   color: var(--dim);
+  display: flex;
+  align-items: baseline;
+  column-gap: 0.6em;
+}
+/* The message wraps inside its own box; the status tag stays on the first line. */
+.boot-line .msg {
+  flex: 0 1 auto;
+  min-width: 0;
+  word-break: normal; /* .row allows breaking anywhere; here wrap only at spaces */
+}
+/* Elastic dotted leader: takes (almost) all free space, so "[ ok ]" sits flush right. */
+.boot-line .leader {
+  flex: 1 1 1.5em;
+  min-width: 1.5em;
+  align-self: stretch;
+  background: radial-gradient(circle, currentColor 0.9px, transparent 1.3px) 0 calc(100% - 0.42em) / 0.6em 0.6em repeat-x;
+  opacity: 0.7;
+}
+.boot-line .ts,
+.boot-line .ok,
+.boot-line .warn {
+  flex: none;
+  white-space: nowrap;
 }
 .boot-line .ok {
   color: var(--green);
