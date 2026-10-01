@@ -37,6 +37,8 @@ body {
   inset: 0;
   overflow: hidden;
   z-index: 0;
+  perspective: 1300px;
+  perspective-origin: 50% 46%;
 }
 .bg-stage::after {
   content: "";
@@ -61,37 +63,111 @@ body {
   will-change: transform;
   animation: wash 46s ease-in-out infinite alternate;
 }
+/* Gyroscope: three tilted rings inside a slowly turning preserve-3d group, so
+   they weave through each other (real plane intersection) and their projected
+   thickness changes with the tilt. A white conic "reflection" sweeps each ring
+   the other way; hue-rotate drifts the tone between cyan, blue and violet. */
+.gyro {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  animation: gyro 110s linear infinite;
+}
+.tilt {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+}
+.tilt.t1 {
+  transform: rotateX(68deg) rotateY(-12deg);
+}
+.tilt.t2 {
+  transform: rotateY(64deg) rotateX(22deg);
+}
+.tilt.t3 {
+  transform: rotateX(-48deg) rotateY(-34deg);
+}
 .ring {
   position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--d);
+  height: var(--d);
+  margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2);
   border-radius: 50%;
   border: 1px solid var(--ring-line);
-  will-change: transform;
+  background: conic-gradient(from 20deg, transparent 0 58%, var(--glow) 74%, transparent 90%);
+  mask: radial-gradient(closest-side, transparent 0 calc(100% - var(--t) - 2px), #000 calc(100% - var(--t)));
+  will-change: transform, filter;
+  animation:
+    spin var(--spin) linear infinite,
+    breathe var(--breathe) ease-in-out infinite alternate,
+    hue var(--hue) ease-in-out infinite alternate;
+}
+.ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 42%, var(--reflect) 48%, transparent 54%);
+  animation: spin-back var(--reflect-spin) linear infinite;
 }
 .ring.r1 {
-  left: -8vw;
-  top: 7vh;
-  width: 54vw;
-  height: 54vw;
+  --d: 108vmin;
+  --t: 34px;
+  --glow: var(--glow-a);
+  --spin: 84s;
+  --breathe: 13s;
+  --hue: 21s;
+  --reflect-spin: 27s;
   border-width: 1.5px;
-  background: conic-gradient(from 20deg, transparent 0 62%, var(--glow-a) 76%, transparent 90%);
-  mask: radial-gradient(closest-side, transparent 0 calc(100% - 46px), #000 calc(100% - 44px));
-  animation: spin 90s linear infinite;
 }
 .ring.r2 {
-  right: -14vw;
-  top: 33vh;
-  width: 62vw;
-  height: 62vw;
-  background: conic-gradient(from 200deg, transparent 0 55%, var(--glow-b) 70%, transparent 86%);
-  mask: radial-gradient(closest-side, transparent 0 calc(100% - 70px), #000 calc(100% - 68px));
-  animation: spin-back 140s linear infinite;
+  --d: 88vmin;
+  --t: 58px;
+  --glow: var(--glow-b);
+  --spin: 126s;
+  --breathe: 17s;
+  --hue: 29s;
+  --reflect-spin: 35s;
+  animation-direction: reverse, alternate, alternate-reverse;
 }
 .ring.r3 {
-  left: 36vw;
-  top: -36vh;
-  width: 39vw;
-  height: 39vw;
-  animation: spin 200s linear infinite;
+  --d: 70vmin;
+  --t: 22px;
+  --glow: var(--glow-c);
+  --spin: 168s;
+  --breathe: 11s;
+  --hue: 25s;
+  --reflect-spin: 41s;
+}
+@keyframes gyro {
+  from {
+    transform: rotateX(16deg) rotateY(0deg);
+  }
+  to {
+    transform: rotateX(16deg) rotateY(360deg);
+  }
+}
+@keyframes breathe {
+  from {
+    scale: 0.9;
+  }
+  to {
+    scale: 1.12;
+  }
+}
+@keyframes hue {
+  from {
+    filter: hue-rotate(-50deg);
+  }
+  to {
+    filter: hue-rotate(65deg);
+  }
 }
 .vignette {
   position: absolute;
@@ -995,14 +1071,18 @@ button.link:hover {
 }
 @media (prefers-reduced-motion: reduce) {
   .wash,
-  .ring {
+  .gyro,
+  .ring,
+  .ring::after {
     animation: none !important;
   }
 }
 /* Small screens: freeze the ambient motion (battery) — refraction is off there anyway. */
 @media (max-width: 720px) {
   .wash,
-  .ring {
+  .gyro,
+  .ring,
+  .ring::after {
     animation: none !important;
   }
 }
