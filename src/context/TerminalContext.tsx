@@ -6,6 +6,10 @@ import type { StaticImageData } from "next/image";
 export interface TerminalActions {
   run: (command: string) => void;
   openLightbox: (image: StaticImageData) => void;
+  /** `ask` with no argument toggles this: every typed line becomes a question. */
+  chatMode: boolean;
+  /** Called by the AI output when an answer completes, so follow-ups get context. */
+  rememberAiTurn: (question: string, answer: string) => void;
 }
 
 export const TerminalContext = createContext<TerminalActions | null>(null);

@@ -1275,3 +1275,61 @@ button.link:hover {
     backdrop-filter: blur(18px) saturate(150%);
   }
 }
+
+/* AI: evidence / follow-up chips under an answer, fit score bar, ai prompt */
+.ai-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+.ai-chips .chip {
+  font-family: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--glass-2);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  min-height: 28px;
+  transition: border-color 0.15s, color 0.15s;
+}
+.ai-chips .chip:hover,
+.ai-chips .chip:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: none;
+}
+.ai-chips .chip.cmd {
+  color: var(--accent);
+}
+.ai-chips-label {
+  font-size: 11.5px;
+  margin-left: 4px;
+}
+.fit-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 2px;
+}
+.fit-bar {
+  flex: 0 1 220px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--glass-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.fit-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--green));
+  transition: width 0.6s ease;
+}
+.ps1.ai .prompt-ai {
+  color: var(--purple);
+  font-weight: 700;
+}

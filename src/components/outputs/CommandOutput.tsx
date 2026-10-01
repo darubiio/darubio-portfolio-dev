@@ -7,6 +7,8 @@ import { About } from "@/components/outputs/About";
 import { Stats } from "@/components/outputs/Stats";
 import { Share } from "@/components/outputs/Share";
 import { Ask } from "@/components/outputs/Ask";
+import { Fit } from "@/components/outputs/Fit";
+import { Notice } from "@/components/outputs/Notice";
 import { Experience } from "@/components/outputs/Experience";
 import { Projects } from "@/components/outputs/Projects";
 import { Skills } from "@/components/outputs/Skills";
@@ -55,9 +57,13 @@ export function CommandOutput({ spec }: { spec: OutputSpec }) {
       return <Output />;
     }
     case "ask":
-      return <Ask question={spec.question} />;
+      return <Ask question={spec.question} history={spec.history} inChat={spec.inChat} />;
+    case "fit":
+      return <Fit jd={spec.jd} />;
+    case "notice":
+      return <Notice text={spec.text} />;
     case "notfound":
-      return <NotFound cmd={spec.cmd} />;
+      return <NotFound cmd={spec.cmd} suggestion={spec.suggestion} />;
     case "theme":
       return <ThemeNotice theme={spec.theme} />;
     case "lang":

@@ -38,7 +38,7 @@ export function Terminal() {
   const [lightbox, setLightbox] = useState<StaticImageData | null>(null);
 
   const shell = useTerminalShell({ theme, setTheme, lang, setLang });
-  const { history, run, clear, showWelcome, matrixActive, exitMatrix, commandHistory } = shell;
+  const { history, run, clear, showWelcome, matrixActive, exitMatrix, commandHistory, chatMode, rememberAiTurn } = shell;
 
   // On touch devices focusing the input pops the virtual keyboard, so only the
   // input bar itself (or a real command) may focus it; pointer devices keep the
@@ -64,7 +64,7 @@ export function Terminal() {
     focusInput();
   };
 
-  const actions: TerminalActions = { run: runCommand, openLightbox: setLightbox };
+  const actions: TerminalActions = { run: runCommand, openLightbox: setLightbox, chatMode, rememberAiTurn };
 
   useEffect(() => {
     scrollToBottom();

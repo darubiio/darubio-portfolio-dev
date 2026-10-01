@@ -25,15 +25,16 @@ function todayKey(): string {
   return `ask:global:${new Date().toISOString().slice(0, 10)}`;
 }
 
-export async function checkLimits(ip: string): Promise<LimitResult> {
+/** `weight` = how many units of the daily budget this call spends (fit answers are longer). */
+export async function checkLimits(ip: string, weight = 1): Promise<LimitResult> {
   if (!redis || !perMinute || !perDay) return "unconfigured";
 
   const [minute, day] = await Promise.all([perMinute.limit(ip), perDay.limit(ip)]);
   if (!minute.success || !day.success) return "rate_limited";
 
   const key = todayKey();
-  const count = await redis.incr(key);
-  if (count === 1) await redis.expire(key, 60 * 60 * 24);
+  const count = await redis.incrby(key, weight);
+  if (count === weight) await redis.expire(key, 60 * 60 * 24);
   if (count > GLOBAL_DAILY_CAP) return "budget_exceeded";
 
   return "ok";

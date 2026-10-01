@@ -28,21 +28,23 @@ export function aiEnabled(): boolean {
   return process.env.AI_ENABLED !== "false" && Boolean(config.apiKey);
 }
 
-const client = config.apiKey
-  ? new OpenAI({ apiKey: config.apiKey, baseURL: config.baseURL })
-  : null;
+const client = config.apiKey ? new OpenAI({ apiKey: config.apiKey, baseURL: config.baseURL }) : null;
 
 export interface ChatMessage {
-  role: "system" | "user";
+  role: "system" | "user" | "assistant";
   content: string;
 }
 
-/** Streams the model's answer as text chunks. Single-turn, tightly capped. */
-export async function streamChat(messages: ChatMessage[], signal?: AbortSignal): Promise<AsyncIterable<string>> {
+/** Streams the model's answer as text chunks. Tightly capped. */
+export async function streamChat(
+  messages: ChatMessage[],
+  signal?: AbortSignal,
+  maxTokens = 320,
+): Promise<AsyncIterable<string>> {
   if (!client) throw new Error("AI client not configured");
 
   const completion = await client.chat.completions.create(
-    { model: config.model, messages, stream: true, temperature: 0.3, max_tokens: 250 },
+    { model: config.model, messages, stream: true, temperature: 0.3, max_tokens: maxTokens },
     { signal },
   );
 

@@ -3,6 +3,7 @@
 import { useState, type KeyboardEvent, type RefObject } from "react";
 import { Prompt } from "@/components/terminal/Prompt";
 import { ghostCompletion } from "@/lib/commands";
+import { useTerminal } from "@/context/TerminalContext";
 import type { useCommandHistory } from "@/hooks/useCommandHistory";
 
 interface InputLineProps {
@@ -16,8 +17,10 @@ interface InputLineProps {
 export function InputLine({ inputRef, run, clear, playKey, commandHistory }: InputLineProps) {
   const [value, setValue] = useState("");
   const [focused, setFocused] = useState(true);
+  const { chatMode } = useTerminal();
 
-  const ghost = ghostCompletion(value);
+  // In chat mode every line is free text: no command completion.
+  const ghost = chatMode ? null : ghostCompletion(value);
 
   const submit = () => {
     run(value);
@@ -74,7 +77,7 @@ export function InputLine({ inputRef, run, clear, playKey, commandHistory }: Inp
         submit();
       }}
     >
-      <Prompt />
+      <Prompt mode={chatMode ? "ai" : "shell"} />
       {/* Text, caret and ghost share one inline flow so long input wraps like a real terminal. */}
       <span className="cmd-line">
         <span className="cmd-echo">{value}</span>
@@ -82,7 +85,7 @@ export function InputLine({ inputRef, run, clear, playKey, commandHistory }: Inp
         {ghost ? <span className="cmd-ghost">{ghost.slice(value.length)}</span> : null}
       </span>
       <input
-        maxLength={240}
+        maxLength={3200}
         ref={inputRef}
         value={value}
         onChange={(event) => setValue(event.target.value)}

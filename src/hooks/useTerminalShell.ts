@@ -1,12 +1,24 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { isClear, isMatrix, langTarget, parseAsk, resolveCommand, themeTarget } from "@/lib/commands";
+import {
+  isClear,
+  isMatrix,
+  langTarget,
+  looksLikeQuestion,
+  parseAsk,
+  parseFit,
+  resolveCommand,
+  suggestCommand,
+  themeTarget,
+} from "@/lib/commands";
 import { syncCommandToUrl } from "@/lib/deeplink";
 import { triggerDownload } from "@/lib/download";
 import { portfolio } from "@/lib/portfolio";
 import { asset } from "@/lib/site";
-import type { HistoryEntry } from "@/lib/history";
+import { messages } from "@/lib/i18n/messages";
+import type { HistoryEntry, OutputSpec } from "@/lib/history";
+import type { Turn } from "@/lib/ai/protocol";
 import type { Theme } from "@/hooks/useTheme";
 import type { Lang } from "@/lib/i18n/types";
 import { useCommandHistory } from "@/hooks/useCommandHistory";
@@ -18,10 +30,18 @@ interface ShellDeps {
   setLang: (lang: Lang) => void;
 }
 
+const ASK_MAX = 200;
+const FIT_MAX = 3000;
+const MEMORY_TURNS = 6;
+const MEMORY_CHARS = 400;
+
 export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [matrixActive, setMatrixActive] = useState(false);
+  const [chatMode, setChatMode] = useState(false);
   const idRef = useRef(0);
+  // Last few AI turns, sent with each question so follow-ups keep their context.
+  const aiHistoryRef = useRef<Turn[]>([]);
   const commandHistory = useCommandHistory();
 
   const nextId = useCallback(() => {
@@ -29,10 +49,19 @@ export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) 
     return idRef.current;
   }, []);
 
+  const rememberAiTurn = useCallback((question: string, answer: string) => {
+    aiHistoryRef.current = [
+      ...aiHistoryRef.current,
+      { role: "user" as const, content: question.slice(0, MEMORY_CHARS) },
+      { role: "assistant" as const, content: answer.slice(0, MEMORY_CHARS) },
+    ].slice(-MEMORY_TURNS);
+  }, []);
+
   const run = useCallback(
     (raw: string) => {
       const cmd = raw.trim();
       const key = cmd.toLowerCase();
+      const t = messages[lang];
 
       if (cmd) commandHistory.push(cmd);
 
@@ -42,13 +71,21 @@ export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) 
         return;
       }
 
-      const echo: HistoryEntry = { id: nextId(), kind: "input", input: cmd };
+      const echo: HistoryEntry = { id: nextId(), kind: "input", input: cmd, prompt: chatMode ? "ai" : "shell" };
+      const push = (...specs: OutputSpec[]) =>
+        setHistory((prev) => [...prev, echo, ...specs.map((spec) => ({ id: nextId(), kind: "output" as const, spec }))]);
+      const askSpec = (question: string): OutputSpec => ({
+        type: "ask",
+        question: question.slice(0, ASK_MAX),
+        history: aiHistoryRef.current,
+        inChat: chatMode,
+      });
 
       const theming = themeTarget(key);
       if (theming) {
         const next: Theme = theming === "toggle" ? (theme === "dark" ? "light" : "dark") : theming;
         setTheme(next);
-        setHistory((prev) => [...prev, echo, { id: nextId(), kind: "output", spec: { type: "theme", theme: next } }]);
+        push({ type: "theme", theme: next });
         return;
       }
 
@@ -56,12 +93,12 @@ export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) 
       if (langing) {
         const next: Lang = langing === "toggle" ? (lang === "en" ? "es" : "en") : langing;
         setLang(next);
-        setHistory((prev) => [...prev, echo, { id: nextId(), kind: "output", spec: { type: "lang", lang: next } }]);
+        push({ type: "lang", lang: next });
         return;
       }
 
       if (isMatrix(key)) {
-        setHistory((prev) => [...prev, echo, { id: nextId(), kind: "output", spec: { type: "matrix" } }]);
+        push({ type: "matrix" });
         setMatrixActive(true);
         return;
       }
@@ -71,30 +108,48 @@ export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) 
         return;
       }
 
-      const askDefault =
-        lang === "es" ? "¿Qué debería saber un reclutador sobre Daniel?" : "What should a recruiter know about Daniel?";
-      const askQuestion = parseAsk(cmd) ?? (key === "ask" ? askDefault : null);
-      if (askQuestion !== null) {
-        const question = askQuestion.slice(0, 200);
-        setHistory((prev) => [...prev, echo, { id: nextId(), kind: "output", spec: { type: "ask", question } }]);
+      // Chat mode: `ask` alone enters, exit/quit leaves, real commands still run.
+      if (key === "ask") {
+        setChatMode(true);
+        push({ type: "notice", text: t.ask.modeOn });
+        return;
+      }
+      if (chatMode && (key === "exit" || key === "quit")) {
+        setChatMode(false);
+        push({ type: "notice", text: t.ask.modeOff });
         return;
       }
 
       const name = resolveCommand(key);
-      if (name) syncCommandToUrl(name);
-      setHistory((prev) => [
-        ...prev,
-        echo,
-        name
-          ? { id: nextId(), kind: "output", spec: { type: "command", name } }
-          : { id: nextId(), kind: "output", spec: { type: "notfound", cmd } },
-      ]);
-
-      if (key === "resume") {
-        window.setTimeout(() => triggerDownload(asset(portfolio.contact.cv)), 200);
+      if (name) {
+        syncCommandToUrl(name);
+        push({ type: "command", name });
+        if (key === "resume") window.setTimeout(() => triggerDownload(asset(portfolio.contact.cv)), 200);
+        return;
       }
+
+      const jd = parseFit(cmd);
+      if (jd !== null) {
+        if (!jd) push({ type: "notice", text: t.fit.hint });
+        else push({ type: "fit", jd: jd.slice(0, FIT_MAX) });
+        return;
+      }
+
+      const asked = parseAsk(cmd);
+      if (asked !== null) {
+        push(askSpec(asked));
+        return;
+      }
+
+      // In chat mode, or when the input reads like a sentence, it is a question for the AI.
+      if (chatMode || looksLikeQuestion(cmd)) {
+        push(askSpec(cmd));
+        return;
+      }
+
+      push({ type: "notfound", cmd, suggestion: suggestCommand(key) });
     },
-    [commandHistory, nextId, setTheme, theme, setLang, lang],
+    [commandHistory, nextId, setTheme, theme, setLang, lang, chatMode],
   );
 
   const exitMatrix = useCallback(() => setMatrixActive(false), []);
@@ -112,5 +167,5 @@ export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) 
     );
   }, [nextId]);
 
-  return { history, run, clear, showWelcome, matrixActive, exitMatrix, commandHistory };
+  return { history, run, clear, showWelcome, matrixActive, exitMatrix, commandHistory, chatMode, rememberAiTurn };
 }

@@ -45,8 +45,9 @@ export interface Messages {
   };
   stats: { see: string };
   share: { intro: string; copy: string; copied: string };
-  ask: { thinking: string; unavailable: string };
-  notfound: { notFound: string; tryPre: string; tryPost: string };
+  ask: { thinking: string; unavailable: string; modeOn: string; modeOff: string; running: string; next: string };
+  fit: { hint: string; score: string };
+  notfound: { notFound: string; tryPre: string; tryPost: string; didYouMean: string };
   theme: { label: string };
   lang: { label: string; en: string; es: string };
   palette: { hint: string };
@@ -94,7 +95,8 @@ const en: Messages = {
   help: {
     commands: {
       about: "who I am, the short version",
-      ask: "ask the AI assistant anything about me",
+      ask: "ask the AI anything about me (no argument = chat mode)",
+      fit: "paste a job description, get an honest fit score",
       stats: "the numbers at a glance",
       experience: "where I've shipped code",
       projects: "things I built (with screenshots)",
@@ -112,6 +114,7 @@ const en: Messages = {
     order: [
       "about",
       "ask",
+      "fit",
       "stats",
       "experience",
       "projects",
@@ -146,8 +149,19 @@ const en: Messages = {
     copy: "copy link",
     copied: "✓ copied",
   },
-  ask: { thinking: "thinking", unavailable: "assistant unavailable right now — try the contact command." },
-  notfound: { notFound: "command not found: ", tryPre: "// try ", tryPost: " to see what I respond to." },
+  ask: {
+    thinking: "thinking",
+    unavailable: "assistant unavailable right now — try the contact command.",
+    modeOn: "// ai mode on — every line you type is a question. type exit to leave.",
+    modeOff: "// back to the shell.",
+    running: "running",
+    next: "you could also ask:",
+  },
+  fit: {
+    hint: "// paste the job description after fit, e.g.  fit Senior React engineer, TypeScript, Node.js, AWS…",
+    score: "fit score",
+  },
+  notfound: { notFound: "command not found: ", tryPre: "// try ", tryPost: " to see what I respond to.", didYouMean: "// did you mean" },
   theme: { label: "theme → " },
   lang: { label: "language → ", en: "English 🇬🇧", es: "Español 🇪🇸" },
   palette: { hint: "not a terminal person? just click ↓" },
@@ -209,7 +223,8 @@ const es: Messages = {
   help: {
     commands: {
       about: "quién soy, en breve",
-      ask: "pregúntale al asistente de IA lo que sea sobre mí",
+      ask: "pregúntale a la IA lo que sea sobre mí (sin argumento = modo chat)",
+      fit: "pega una oferta y te digo cuánto encajo, con honestidad",
       stats: "los números de un vistazo",
       experience: "dónde he llevado código a producción",
       projects: "cosas que he construido (con capturas)",
@@ -227,6 +242,7 @@ const es: Messages = {
     order: [
       "about",
       "ask",
+      "fit",
       "stats",
       "experience",
       "projects",
@@ -261,8 +277,19 @@ const es: Messages = {
     copy: "copiar enlace",
     copied: "✓ copiado",
   },
-  ask: { thinking: "pensando", unavailable: "asistente no disponible ahora mismo — prueba el comando contact." },
-  notfound: { notFound: "comando no encontrado: ", tryPre: "// prueba ", tryPost: " para ver a qué respondo." },
+  ask: {
+    thinking: "pensando",
+    unavailable: "asistente no disponible ahora mismo — prueba el comando contact.",
+    modeOn: "// modo ia activado — cada línea que escribas es una pregunta. escribe exit para salir.",
+    modeOff: "// de vuelta al shell.",
+    running: "ejecutando",
+    next: "también puedes preguntar:",
+  },
+  fit: {
+    hint: "// pega la descripción del puesto tras fit, p. ej.  fit Senior React engineer, TypeScript, Node.js, AWS…",
+    score: "encaje",
+  },
+  notfound: { notFound: "comando no encontrado: ", tryPre: "// prueba ", tryPost: " para ver a qué respondo.", didYouMean: "// ¿querías decir" },
   theme: { label: "tema → " },
   lang: { label: "idioma → ", en: "English 🇬🇧", es: "Español 🇪🇸" },
   palette: { hint: "¿no eres de terminal? haz clic ↓" },
