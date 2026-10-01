@@ -1,13 +1,16 @@
+const isDev = process.env.NODE_ENV !== "production";
+
 const CSP = [
   "default-src 'self'",
   // 'unsafe-inline' needed: Next.js streams RSC payload via inline scripts and the
   // theme/lang boot scripts in layout.tsx are inline. A nonce would force dynamic
   // rendering of the (otherwise static) page. No user-supplied HTML is ever rendered.
-  "script-src 'self' 'unsafe-inline'",
+  // React and Turbopack use eval() for dev-only debugging (source maps, HMR) — never in production.
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  "connect-src 'self'",
+  `connect-src 'self'${isDev ? " ws: wss:" : ""}`,
   "frame-ancestors 'none'",
   "object-src 'none'",
   "base-uri 'self'",
