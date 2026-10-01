@@ -231,10 +231,10 @@ body {
 }
 @keyframes hue {
   from {
-    filter: hue-rotate(-50deg);
+    filter: hue-rotate(var(--hue-from));
   }
   to {
-    filter: hue-rotate(65deg);
+    filter: hue-rotate(var(--hue-to));
   }
 }
 .vignette {

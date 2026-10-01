@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: portfolio.identity.tagline,
     start_url: "/",
     display: "standalone",
-    background_color: "#15171c",
-    theme_color: "#15171c",
+    background_color: "#0c1220",
+    theme_color: "#0c1220",
     icons: [{ src: "/favicon.svg", sizes: "any", type: "image/svg+xml" }],
   };
 }

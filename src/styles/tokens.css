@@ -1,5 +1,5 @@
 :root {
-  --bg-deep: #15171c;
+  --bg-deep: #0c1220;
   --glass: rgba(40, 44, 52, 0.5);
   --glass-2: rgba(33, 37, 43, 0.72);
   --header: rgba(30, 33, 39, 0.78);
@@ -19,18 +19,21 @@
   --selection: rgba(97, 175, 239, 0.3);
   --shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
   --shot-border: rgba(255, 255, 255, 0.1);
-  --wash: rgba(198, 120, 221, 0.3);
-  --glow-a: rgba(97, 175, 239, 0.9);
-  --glow-b: rgba(198, 120, 221, 0.82);
-  --glow-c: rgba(86, 182, 194, 0.88);
+  /* Aurora borealis: teal wash, green / violet / cyan curtains over a night-blue sky. */
+  --wash: rgba(52, 211, 153, 0.26);
+  --glow-a: rgba(74, 222, 128, 0.9);
+  --glow-b: rgba(168, 85, 247, 0.82);
+  --glow-c: rgba(34, 211, 238, 0.88);
   --reflect: rgba(255, 255, 255, 0.72);
   --ring-line: rgba(255, 255, 255, 0.22);
-  --vignette: rgba(0, 0, 0, 0.6);
+  --vignette: rgba(2, 6, 16, 0.66);
+  --hue-from: -40deg;
+  --hue-to: 50deg;
   --grid-line: rgba(255, 255, 255, 0.025);
 }
 
 [data-theme="light"] {
-  --bg-deep: #d3d5da;
+  --bg-deep: #efd9cb;
   --glass: rgba(250, 250, 250, 0.56);
   --glass-2: rgba(244, 244, 245, 0.78);
   --header: rgba(236, 236, 238, 0.82);
@@ -50,12 +53,15 @@
   --selection: rgba(64, 120, 242, 0.22);
   --shadow: 0 30px 70px -24px rgba(48, 52, 70, 0.45), 0 6px 20px -8px rgba(48, 52, 70, 0.3);
   --shot-border: rgba(0, 0, 0, 0.12);
-  --wash: rgba(166, 38, 164, 0.18);
-  --glow-a: rgba(64, 120, 242, 0.6);
-  --glow-b: rgba(166, 38, 164, 0.5);
-  --glow-c: rgba(1, 132, 188, 0.55);
-  --reflect: rgba(255, 255, 255, 0.85);
-  --ring-line: rgba(0, 0, 0, 0.22);
-  --vignette: rgba(48, 52, 70, 0.35);
+  /* Sunrise: peach wash, gold / rose / lilac light over a warm dawn sky. */
+  --wash: rgba(255, 160, 110, 0.34);
+  --glow-a: rgba(255, 176, 64, 0.72);
+  --glow-b: rgba(244, 114, 182, 0.62);
+  --glow-c: rgba(167, 139, 250, 0.58);
+  --reflect: rgba(255, 255, 255, 0.9);
+  --ring-line: rgba(110, 50, 30, 0.22);
+  --vignette: rgba(120, 70, 60, 0.32);
+  --hue-from: -22deg;
+  --hue-to: 28deg;
   --grid-line: rgba(0, 0, 0, 0.03);
 }
