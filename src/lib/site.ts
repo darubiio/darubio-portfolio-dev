@@ -1,4 +1,4 @@
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://danielrubio.dev").replace(/\/$/, "");
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://darubio.dev").replace(/\/$/, "");
 
 export function asset(path: string): string {
   return path.startsWith("/") ? path : `/${path}`;
