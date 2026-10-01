@@ -1039,7 +1039,7 @@ button.link:hover {
 .input-bar {
   flex: 0 0 auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   padding: 11px clamp(12px, 2vw, 18px);
   border-top: 1px solid var(--border-2);
@@ -1054,6 +1054,13 @@ button.link:hover {
 }
 .input-bar .cmd-echo {
   font-size: 13.5px;
+}
+/* Wraps long commands onto new lines (the bar grows); breaks anywhere so a long token can't overflow. */
+.input-bar .cmd-line {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 .input-bar input {
   position: absolute;
@@ -1075,6 +1082,7 @@ button.link:hover {
   height: 17px;
   background: var(--accent);
   display: inline-block;
+  vertical-align: text-bottom;
   margin-left: -4px;
   animation: blink 1.05s steps(1) infinite;
 }

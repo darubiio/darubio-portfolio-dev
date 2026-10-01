@@ -75,12 +75,14 @@ export function InputLine({ inputRef, run, clear, playKey, commandHistory }: Inp
       }}
     >
       <Prompt />
-      <span className="cmd-echo" style={{ whiteSpace: "pre" }}>
-        {value}
+      {/* Text, caret and ghost share one inline flow so long input wraps like a real terminal. */}
+      <span className="cmd-line">
+        <span className="cmd-echo">{value}</span>
+        <span className="bcaret" />
+        {ghost ? <span className="cmd-ghost">{ghost.slice(value.length)}</span> : null}
       </span>
-      <span className="bcaret" />
-      {ghost ? <span className="cmd-ghost">{ghost.slice(value.length)}</span> : null}
       <input
+        maxLength={240}
         ref={inputRef}
         value={value}
         onChange={(event) => setValue(event.target.value)}
