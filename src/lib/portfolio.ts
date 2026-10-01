@@ -14,12 +14,13 @@ export const portfolio: Portfolio = {
   },
 
   about: [
-    "Software engineer with 6+ years building full-stack applications at scale",
-    "with React, Next.js, TypeScript and Node.js. Track record delivering",
-    "mission-critical systems to production across banking, transport and logistics.",
+    "Software engineer with 6+ years building user interfaces with JavaScript and React,",
+    "and the full stack behind them with Next.js, TypeScript and Node.js. Track record",
+    "shipping mission-critical systems to production across banking, transport and logistics.",
     "",
-    "I like the boring parts: reliability, observability, and code that the",
-    "on-call engineer (sometimes me) doesn't curse at 3am. // 99.9% uptime, 0.1% luck",
+    "Focused on clean, efficient front-end work. I like the boring parts: reliability,",
+    "observability, code the on-call engineer (sometimes me) doesn't curse at 3am —",
+    "and I'm eager to bring that to more innovative, high-impact projects. // 99.9% uptime, 0.1% luck",
   ],
 
   stats: [
