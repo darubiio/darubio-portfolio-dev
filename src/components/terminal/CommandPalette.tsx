@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useTerminal } from "@/context/TerminalContext";
 import { useMessages } from "@/hooks/useMessages";
 
@@ -43,11 +44,12 @@ export function CommandPalette({ playKey }: { playKey: () => void }) {
         {t.palette.hint}
       </div>
       <div className="cmd-row">
-        {BUTTONS.map(({ command, icon, variant, label, desktopOnly }) => (
+        {BUTTONS.map(({ command, icon, variant, label, desktopOnly }, index) => (
           <button
             key={command}
             type="button"
             className={["cbtn", variant, desktopOnly && "desktop-only"].filter(Boolean).join(" ")}
+            style={{ "--i": index } as CSSProperties}
             onClick={() => activate(command)}
           >
             <span className="ic">{icon}</span>

@@ -1024,11 +1024,36 @@ button.link:hover {
 .cbtn .ic {
   color: var(--accent);
 }
+/* A pulse sweeps across the buttons every few seconds to show they are clickable.
+   It animates `scale` (not `transform`) so the hover lift still applies, and stops
+   while the pointer is over the row so nothing moves under the cursor. */
+.cbtn {
+  animation: cbtn-pulse 5s ease-in-out infinite;
+  animation-delay: calc(1.5s + var(--i, 0) * 0.12s);
+}
+.cmd-row:hover .cbtn {
+  animation: none;
+}
+@keyframes cbtn-pulse {
+  0%,
+  10%,
+  100% {
+    scale: 1;
+    box-shadow: none;
+  }
+  5% {
+    scale: 1.1;
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--pulse, var(--accent)) 60%, transparent),
+      0 0 14px -2px color-mix(in oklab, var(--pulse, var(--accent)) 70%, transparent);
+  }
+}
 .cbtn.cv {
+  --pulse: var(--green);
   color: var(--green);
   border-color: color-mix(in oklab, var(--green) 40%, transparent);
 }
 .cbtn.ai {
+  --pulse: var(--purple);
   color: var(--purple);
   border-color: color-mix(in oklab, var(--purple) 45%, transparent);
   background: color-mix(in oklab, var(--purple) 10%, var(--glass-2));
@@ -1252,6 +1277,9 @@ button.link:hover {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .cbtn {
+    animation: none;
+  }
   .wash,
   .drift,
   .gyro,
