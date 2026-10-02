@@ -94,5 +94,3 @@ export interface Portfolio {
   contact: Contact;
 }
 
-export type BootStatus = "" | "ok" | "warn";
-export type BootLine = readonly [timestamp: string, message: string, status: BootStatus];

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 interface TypewriterProps {
   text: string;
@@ -11,27 +11,39 @@ interface TypewriterProps {
   className?: string;
 }
 
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
+
+function subscribeReducedMotion(onChange: () => void) {
+  const query = window.matchMedia(REDUCED_MOTION);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+/** False on the server and during hydration, so server-rendered text never mismatches. */
+function usePrefersReducedMotion() {
+  return useSyncExternalStore(subscribeReducedMotion, () => window.matchMedia(REDUCED_MOTION).matches, () => false);
+}
 
 export function Typewriter({ text, speed = 26, delay = 120, className }: TypewriterProps) {
-  const [shown, setShown] = useState(() => (prefersReducedMotion() ? text.length : 0));
-  const doneRef = useRef(shown >= text.length);
+  const reducedMotion = usePrefersReducedMotion();
+  const [typed, setTyped] = useState(0);
+  const shown = reducedMotion ? text.length : typed;
+  const doneRef = useRef(false);
 
   useEffect(() => {
-    if (doneRef.current) return;
+    if (doneRef.current || reducedMotion) return;
 
     let timer = 0;
     let i = 0;
 
     const finish = () => {
       doneRef.current = true;
-      setShown(text.length);
+      setTyped(text.length);
     };
 
     const step = () => {
       i += 1;
-      setShown(i);
+      setTyped(i);
       if (i >= text.length) {
         doneRef.current = true;
         return;
@@ -49,7 +61,7 @@ export function Typewriter({ text, speed = 26, delay = 120, className }: Typewri
       window.removeEventListener("keydown", finish);
       window.removeEventListener("pointerdown", finish);
     };
-  }, [text, speed, delay]);
+  }, [text, speed, delay, reducedMotion]);
 
   const typing = shown < text.length;
 

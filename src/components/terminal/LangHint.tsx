@@ -9,9 +9,8 @@ const DISMISS_KEY = "rubio-lang-hint";
 
 /**
  * One-time, dismissible nudge for Spanish-preferring visitors. Never switches
- * language on its own — it only suggests `lang es`. Only mounts after the boot
- * sequence (a client-only effect), long past hydration, so reading
- * navigator/localStorage in the initializer can't cause a hydration mismatch.
+ * language on its own — it only suggests `lang es`. Only mounts after hydration,
+ * so reading navigator/localStorage in the initializer can't cause a mismatch.
  */
 export function LangHint() {
   const { run } = useTerminal();

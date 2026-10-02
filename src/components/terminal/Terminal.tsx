@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import type { StaticImageData } from "next/image";
 import { TerminalContext, type TerminalActions } from "@/context/TerminalContext";
 import { AmbientBackground } from "@/components/terminal/AmbientBackground";
 import { GlassFilter } from "@/components/terminal/GlassFilter";
 import { TitleBar } from "@/components/terminal/TitleBar";
-import { BootLog } from "@/components/terminal/BootLog";
 import { HistoryView } from "@/components/terminal/HistoryView";
 import { CommandPalette } from "@/components/terminal/CommandPalette";
 import { Lightbox } from "@/components/terminal/Lightbox";
@@ -16,10 +15,8 @@ import { InputLine } from "@/components/terminal/InputLine";
 import { readInitialCommand } from "@/lib/deeplink";
 import { useTheme } from "@/hooks/useTheme";
 import { useLang } from "@/hooks/useLang";
-import { useMessages } from "@/hooks/useMessages";
 import { useSound } from "@/hooks/useSound";
 import { useAutoScroll } from "@/hooks/useAutoScroll";
-import { useBootSequence } from "@/hooks/useBootSequence";
 import { useTerminalShell } from "@/hooks/useTerminalShell";
 
 const MatrixRain = dynamic(
@@ -27,10 +24,16 @@ const MatrixRain = dynamic(
   { ssr: false },
 );
 
+const noopSubscribe = () => () => {};
+
+/** False during SSR and hydration, true afterwards: gates UI that reads browser-only state. */
+function useHydrated() {
+  return useSyncExternalStore(noopSubscribe, () => true, () => false);
+}
+
 export function Terminal() {
   const { theme, setTheme } = useTheme();
   const { lang, setLang } = useLang();
-  const t = useMessages();
   const { sound, toggleSound, playKey } = useSound();
   const { ref: termRef, scrollToBottom } = useAutoScroll<HTMLDivElement>();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -38,7 +41,7 @@ export function Terminal() {
   const [lightbox, setLightbox] = useState<StaticImageData | null>(null);
 
   const shell = useTerminalShell({ theme, setTheme, lang, setLang });
-  const { history, run, clear, showWelcome, matrixActive, exitMatrix, commandHistory, chatMode, rememberAiTurn } = shell;
+  const { history, atLanding, run, clear, matrixActive, exitMatrix, commandHistory, chatMode, rememberAiTurn } = shell;
 
   // On touch devices focusing the input pops the virtual keyboard, so only the
   // input bar itself (or a real command) may focus it; pointer devices keep the
@@ -48,27 +51,33 @@ export function Terminal() {
     inputRef.current?.focus();
   };
 
-  const onReady = () => {
-    const initial = readInitialCommand();
-    if (initial) run(initial);
-    else showWelcome();
-    scrollToBottom();
-    window.setTimeout(focusInput, 40);
-  };
+  const hydrated = useHydrated();
 
-  const { bootLines, booting, skipNow } = useBootSequence(onReady, t.boot);
+  // The landing view is server-rendered; a `?cmd=` deep-link replaces it with that command.
+  const onMount = useEffectEvent(() => {
+    const initial = readInitialCommand();
+    if (initial) {
+      clear();
+      run(initial);
+    }
+    focusInput();
+  });
+
+  useEffect(() => {
+    onMount();
+  }, []);
 
   const runCommand = (command: string) => {
-    skipNow();
     run(command);
     focusInput();
   };
 
   const actions: TerminalActions = { run: runCommand, openLightbox: setLightbox, chatMode, rememberAiTurn };
 
+  // The landing view is read from the top; anything run afterwards scrolls into view.
   useEffect(() => {
-    scrollToBottom();
-  }, [bootLines, history, scrollToBottom]);
+    if (!atLanding) scrollToBottom();
+  }, [atLanding, history, scrollToBottom]);
 
   return (
     <TerminalContext value={actions}>
@@ -76,7 +85,6 @@ export function Terminal() {
       <div className="stage" onClick={focusInput}>
         <div className="window" ref={windowRef} onClick={(event) => event.stopPropagation()}>
           <TitleBar
-            booting={booting}
             sound={sound}
             theme={theme}
             lang={lang}
@@ -85,11 +93,10 @@ export function Terminal() {
             onToggleLang={() => runCommand("lang")}
           />
           <div className="term" ref={termRef} onClick={focusInput}>
-            <BootLog bootLines={bootLines} lines={t.boot} booting={booting} />
             <HistoryView history={history} />
-            {booting ? null : <LangHint />}
+            {hydrated ? <LangHint /> : null}
           </div>
-          {booting ? null : <CommandPalette playKey={playKey} />}
+          <CommandPalette playKey={playKey} />
           <InputLine
             inputRef={inputRef}
             run={runCommand}

@@ -35,11 +35,17 @@ const FIT_MAX = 3000;
 const MEMORY_TURNS = 6;
 const MEMORY_CHARS = 400;
 
+/** Server-rendered landing view: who I am, then the bio. `instant` skips the fade-in so it paints immediately. */
+const LANDING: HistoryEntry[] = [
+  { id: 1, kind: "output", spec: { type: "command", name: "welcome" }, instant: true },
+  { id: 2, kind: "output", spec: { type: "command", name: "about" }, instant: true },
+];
+
 export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) {
-  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [history, setHistory] = useState<HistoryEntry[]>(LANDING);
   const [matrixActive, setMatrixActive] = useState(false);
   const [chatMode, setChatMode] = useState(false);
-  const idRef = useRef(0);
+  const idRef = useRef(LANDING.length);
   // Last few AI turns, sent with each question so follow-ups keep their context.
   const aiHistoryRef = useRef<Turn[]>([]);
   const commandHistory = useCommandHistory();
@@ -156,16 +162,7 @@ export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) 
 
   const clear = useCallback(() => setHistory([]), []);
 
-  const showWelcome = useCallback(() => {
-    setHistory((prev) =>
-      prev.length
-        ? prev
-        : [
-            { id: nextId(), kind: "output", spec: { type: "command", name: "welcome" } },
-            { id: nextId(), kind: "output", spec: { type: "command", name: "stats" } },
-          ],
-    );
-  }, [nextId]);
+  const atLanding = history === LANDING;
 
-  return { history, run, clear, showWelcome, matrixActive, exitMatrix, commandHistory, chatMode, rememberAiTurn };
+  return { history, atLanding, run, clear, matrixActive, exitMatrix, commandHistory, chatMode, rememberAiTurn };
 }

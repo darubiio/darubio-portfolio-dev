@@ -17,4 +17,4 @@ export type OutputSpec =
 
 export type HistoryEntry =
   | { id: number; kind: "input"; input: string; prompt: PromptMode }
-  | { id: number; kind: "output"; spec: OutputSpec };
+  | { id: number; kind: "output"; spec: OutputSpec; instant?: true };

@@ -4,7 +4,6 @@ import type { Theme } from "@/hooks/useTheme";
 import type { Lang } from "@/lib/i18n/types";
 
 interface TitleBarProps {
-  booting: boolean;
   sound: boolean;
   theme: Theme;
   lang: Lang;
@@ -13,12 +12,12 @@ interface TitleBarProps {
   onToggleLang: () => void;
 }
 
-export function TitleBar({ booting, sound, theme, lang, onToggleSound, onToggleTheme, onToggleLang }: TitleBarProps) {
+export function TitleBar({ sound, theme, lang, onToggleSound, onToggleTheme, onToggleLang }: TitleBarProps) {
   return (
     <div className="titlebar">
       <TrafficLights />
       <div className="title">
-        — <b>darubio@portfolio</b>: ~/{booting ? "boot" : "shell"} —
+        — <b>darubio@portfolio</b>: ~/shell —
       </div>
       <TitleBarActions
         sound={sound}
