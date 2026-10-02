@@ -185,13 +185,17 @@ export const portfolio: Portfolio = {
 
   skills: [
     {
+      id: "frontend",
       group: "Frontend",
-      items: ["React.js", "Next.js", "Redux", "React Native", "Micro-Frontends", "PWA", "TypeScript", "JavaScript", "HTML", "CSS"],
+      items: ["React.js", "Next.js", "TypeScript", "JavaScript", "React Native", "Micro-Frontends", "PWA", "HTML", "CSS"],
     },
-    { group: "Backend & APIs", items: ["Node.js", "REST APIs", "OAuth 2.0", ".NET", "Go"] },
-    { group: "Databases", items: ["PostgreSQL", "MySQL", "MongoDB", "Redis"] },
-    { group: "Quality & DevOps", items: ["Jest", "Git", "GitHub", "GitLab", "CI/CD", "Vercel", "Agile"] },
-    { group: "Other", items: ["Backstage", "Design Patterns", "CASL", "Zoho Inventory API"] },
+    { id: "ui", group: "UI & Styling", items: ["Tailwind CSS", "Material UI", "Chakra UI", "daisyUI"] },
+    { id: "state", group: "State & Data Fetching", items: ["Redux", "Zustand", "TanStack Query"] },
+    { id: "forms", group: "Forms & Access Control", items: ["React Hook Form", "Formik", "CASL"] },
+    { id: "backend", group: "Backend & APIs", items: ["Node.js", "REST APIs", "OAuth 2.0", ".NET", "Go"] },
+    { id: "data", group: "Databases", items: ["PostgreSQL", "MySQL", "MongoDB", "Redis"] },
+    { id: "quality", group: "Quality & DevOps", items: ["Jest", "Git", "GitHub", "GitLab", "CI/CD", "Vercel", "Agile"] },
+    { id: "other", group: "Other", items: ["Backstage", "Design Patterns", "Zoho Inventory API"] },
   ],
 
   education: {

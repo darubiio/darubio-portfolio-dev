@@ -1,6 +1,6 @@
 import { getPortfolio } from "@/lib/i18n/getPortfolio";
 import type { Lang } from "@/lib/i18n/types";
-import type { Portfolio } from "@/lib/types";
+import type { Portfolio, SkillGroupId } from "@/lib/types";
 
 /**
  * Deterministic, zero-cost fallback used whenever the live model is
@@ -18,6 +18,8 @@ interface Rule {
 
 function buildRules(lang: Lang, p: Portfolio): Rule[] {
   const { identity, experience, projects, skills, contact, languages, education } = p;
+  const skill = (id: SkillGroupId) => skills.find((group) => group.id === id)?.items ?? [];
+  const libraries = [...skill("ui"), ...skill("state"), ...skill("forms")].join(", ");
   const es = lang === "es";
 
   return [
@@ -38,19 +40,19 @@ function buildRules(lang: Lang, p: Portfolio): Rule[] {
       cmd: "experience, projects",
     },
     {
-      match: /\b(react|frontend|front-end|next\.?js|typescript)/i,
+      match: /\b(react|frontend|front-end|next\.?js|typescript|tailwind|material|mui|chakra|daisy|redux|zustand|tanstack|formik|hook form)/i,
       answer: () =>
         es
-          ? `Su punto fuerte. ${identity.name} trabaja a diario con ${skills[0].items.slice(0, 6).join(", ")} — más de 6 años llevando React/Next.js a producción, incluidas arquitecturas de micro-frontends.`
-          : `Core strength. ${identity.name} works daily in ${skills[0].items.slice(0, 6).join(", ")} — 6+ years shipping production React/Next.js, including micro-frontend architectures.`,
+          ? `Su punto fuerte. ${identity.name} trabaja a diario con ${skill("frontend").slice(0, 6).join(", ")} — más de 6 años llevando React/Next.js a producción, incluidas arquitecturas de micro-frontends. Librerías habituales: ${libraries}.`
+          : `Core strength. ${identity.name} works daily in ${skill("frontend").slice(0, 6).join(", ")} — 6+ years shipping production React/Next.js, including micro-frontend architectures. Go-to libraries: ${libraries}.`,
       cmd: "skills, projects",
     },
     {
       match: /\b(backend|node|api|\.net|golang|\bgo\b|database|postgres|redis|sql|base de datos)/i,
       answer: () =>
         es
-          ? `Su foco es el frontend, con experiencia sólida de backend: ${skills[1].items.join(", ")}, ${skills[2].items.join(", ")} para datos. Construyó sistemas políglotas en tiempo real (Node.js, .NET, Go) para los túneles de la M-30 de Madrid.`
-          : `His focus is frontend, backed by solid backend experience: ${skills[1].items.join(", ")}, ${skills[2].items.join(", ")} for data. Built polyglot real-time systems (Node.js, .NET, Go) for Madrid's M-30 tunnels.`,
+          ? `Su foco es el frontend, con experiencia sólida de backend: ${skill("backend").join(", ")}, ${skill("data").join(", ")} para datos. Construyó sistemas políglotas en tiempo real (Node.js, .NET, Go) para los túneles de la M-30 de Madrid.`
+          : `His focus is frontend, backed by solid backend experience: ${skill("backend").join(", ")}, ${skill("data").join(", ")} for data. Built polyglot real-time systems (Node.js, .NET, Go) for Madrid's M-30 tunnels.`,
       cmd: "skills, experience",
     },
     {
@@ -76,7 +78,7 @@ function buildRules(lang: Lang, p: Portfolio): Rule[] {
       cmd: "languages",
     },
     {
-      match: /\b(study|degree|education|university|estudi|carrera|título|titulac)/i,
+      match: /\b(study|degree|education|university|estudi|carrera|título|titulac|formaci|universidad)/i,
       answer: () => `${education.degree} — ${education.school} (${education.place}).`,
       cmd: "education",
     },

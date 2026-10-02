@@ -46,7 +46,11 @@ export interface Project {
   link: string | null;
 }
 
+export type SkillGroupId = "frontend" | "ui" | "state" | "forms" | "backend" | "data" | "quality" | "other";
+
 export interface SkillGroup {
+  /** Stable key (the label is translated). */
+  id: SkillGroupId;
   group: string;
   items: string[];
 }

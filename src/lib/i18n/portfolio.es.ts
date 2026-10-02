@@ -1,4 +1,4 @@
-import type { Portfolio } from "@/lib/types";
+import type { Portfolio, SkillGroupId } from "@/lib/types";
 import { portfolio as en } from "@/lib/portfolio";
 
 /**
@@ -129,7 +129,16 @@ const projectContent = [
   },
 ];
 
-const skillGroups = ["Frontend", "Backend y APIs", "Bases de datos", "Calidad y DevOps", "Otros"];
+const skillGroups: Record<SkillGroupId, string> = {
+  frontend: "Frontend",
+  ui: "UI y estilos",
+  state: "Estado y obtención de datos",
+  forms: "Formularios y control de acceso",
+  backend: "Backend y APIs",
+  data: "Bases de datos",
+  quality: "Calidad y DevOps",
+  other: "Otros",
+};
 
 const languageContent = [
   { name: "Español", level: "Nativo" },
@@ -186,7 +195,7 @@ export const portfolioEs: Portfolio = {
       : project;
   }),
 
-  skills: en.skills.map((group, i) => ({ ...group, group: skillGroups[i] ?? group.group })),
+  skills: en.skills.map((group) => ({ ...group, group: skillGroups[group.id] })),
 
   education: {
     ...en.education,
