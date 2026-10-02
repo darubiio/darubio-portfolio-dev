@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { OutputBlock } from "@/components/outputs/OutputBlock";
 import { AiChips } from "@/components/outputs/AiChips";
 import { useAiStream } from "@/hooks/useAiStream";
@@ -9,7 +10,8 @@ import { parseTrailer, visibleBody } from "@/lib/ai/protocol";
 
 /** `fit <job description>`: the model scores the match and explains it. */
 export function Fit({ jd }: { jd: string }) {
-  const { lang } = useLang();
+  // Assessed in the language the site had when it was requested: toggling it later must not re-run the request.
+  const [lang] = useState(useLang().lang);
   const t = useMessages();
   const { status, text } = useAiStream({ mode: "fit", question: jd, lang });
 

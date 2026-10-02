@@ -1,4 +1,4 @@
-import { buildFitPrompt, buildSystemPrompt } from "@/lib/ai/system-prompt";
+import { buildFitPrompt, buildSystemPrompt, languageReminder } from "@/lib/ai/system-prompt";
 import { cannedAnswer, cannedFit, refusal } from "@/lib/ai/knowledge";
 import { looksLikeInjection } from "@/lib/ai/guard";
 import { aiEnabled, streamChat, type ChatMessage } from "@/lib/ai/providers";
@@ -115,8 +115,8 @@ export async function POST(req: Request): Promise<Response> {
         role: "user",
         content:
           mode === "fit"
-            ? `Assess the fit for this job description. ${frame(question)}`
-            : `Answer this visitor's question about Daniel. ${frame(question)}`,
+            ? `Assess the fit for this job description. ${frame(question)}\n${languageReminder(lang)}`
+            : `Answer this visitor's question about Daniel. ${frame(question)}\n${languageReminder(lang)}`,
       },
     ];
 

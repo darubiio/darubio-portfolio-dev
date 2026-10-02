@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { OutputBlock } from "@/components/outputs/OutputBlock";
 import { AiChips } from "@/components/outputs/AiChips";
 import { useTerminal } from "@/context/TerminalContext";
@@ -10,7 +10,8 @@ import { useMessages } from "@/hooks/useMessages";
 import { parseTrailer, visibleBody, type Turn } from "@/lib/ai/protocol";
 
 export function Ask({ question, history, inChat }: { question: string; history: Turn[]; inChat: boolean }) {
-  const { lang } = useLang();
+  // Answered in the language the site had when it was asked: toggling it later must not re-ask (and re-bill) old questions.
+  const [lang] = useState(useLang().lang);
   const t = useMessages();
   const { run, rememberAiTurn } = useTerminal();
   const { status, text } = useAiStream({ mode: "ask", question, lang, history });
