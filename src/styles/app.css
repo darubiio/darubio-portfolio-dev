@@ -577,6 +577,31 @@ button.link:hover {
   filter: brightness(1.2);
 }
 
+.ai-promo {
+  margin-top: 12px;
+  padding: 8px 14px;
+  border: 1px solid color-mix(in oklab, var(--purple) 35%, transparent);
+  border-left: 3px solid var(--purple);
+  border-radius: 8px;
+  background: color-mix(in oklab, var(--purple) 7%, transparent);
+}
+.ai-badge {
+  color: var(--purple);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.9em;
+}
+/* Questions cycle through different lengths: reserve two lines where they may wrap, so nothing below jumps. */
+@media (max-width: 720px) {
+  .ai-try {
+    min-height: 3.3em;
+  }
+  .cbtn.desktop-only {
+    display: none;
+  }
+}
+
 .h {
   display: flex;
   align-items: center;
@@ -1002,6 +1027,14 @@ button.link:hover {
 .cbtn.cv {
   color: var(--green);
   border-color: color-mix(in oklab, var(--green) 40%, transparent);
+}
+.cbtn.ai {
+  color: var(--purple);
+  border-color: color-mix(in oklab, var(--purple) 45%, transparent);
+  background: color-mix(in oklab, var(--purple) 10%, var(--glass-2));
+}
+.cbtn.ai .ic {
+  color: var(--purple);
 }
 
 .input-bar {

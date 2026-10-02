@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { OutputBlock } from "@/components/outputs/OutputBlock";
 import { CommandLink } from "@/components/outputs/CommandLink";
 import { StatusPill } from "@/components/outputs/StatusPill";
 import { Typewriter } from "@/components/terminal/Typewriter";
+import { TypeCycle } from "@/components/terminal/TypeCycle";
+import { useTerminal } from "@/context/TerminalContext";
 import { BANNER } from "@/lib/ascii";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useMessages } from "@/hooks/useMessages";
@@ -11,7 +14,10 @@ import { useMessages } from "@/hooks/useMessages";
 export function Welcome() {
   const { identity } = usePortfolio();
   const t = useMessages();
-  const askCmd = `ask "${t.welcome.askQuestion}"`;
+  const { run } = useTerminal();
+  const [question, setQuestion] = useState(t.welcome.aiQuestions[0]);
+  const [paused, setPaused] = useState(false);
+  const askCmd = `ask "${question}"`;
 
   return (
     <OutputBlock>
@@ -28,9 +34,31 @@ export function Welcome() {
         <CommandLink cmd="help">{t.welcome.hintHelp}</CommandLink>
         <span className="cmt">{t.welcome.hintPost}</span>
       </div>
-      <div className="row cmt">
-        {t.welcome.askNew}
-        <CommandLink cmd={askCmd}>{askCmd}</CommandLink>
+      <div
+        className="ai-promo"
+        onPointerEnter={() => setPaused(true)}
+        onPointerLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
+      >
+        <div className="row">
+          <span className="ai-badge">✦ {t.welcome.aiLabel}</span> <span className="b">{t.welcome.aiTitle}</span>
+        </div>
+        <div className="row ai-try">
+          <span className="cmt">{t.welcome.aiTry}</span>{" "}
+          <button type="button" className="link" aria-label={askCmd} onClick={() => run(askCmd)}>
+            <span aria-hidden>
+              ask &quot;
+              <TypeCycle phrases={t.welcome.aiQuestions} paused={paused} onChange={setQuestion} />
+              &quot;
+            </span>
+          </button>
+        </div>
+        <div className="row cmt">
+          {t.welcome.fitPre}
+          <CommandLink cmd="fit">fit</CommandLink>
+          {t.welcome.fitPost}
+        </div>
       </div>
     </OutputBlock>
   );

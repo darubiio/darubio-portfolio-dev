@@ -6,17 +6,22 @@ import { useMessages } from "@/hooks/useMessages";
 interface PaletteButton {
   command: string;
   icon: string;
-  variant?: "cv";
+  variant?: "cv" | "ai";
+  /** Visible label when it differs from the command (and needs translating). */
+  label?: "ai";
+  /** Dropped on small screens so the palette keeps to two rows. */
+  desktopOnly?: boolean;
 }
 
 const BUTTONS: ReadonlyArray<PaletteButton> = [
+  { command: "ask", icon: "✦", variant: "ai", label: "ai" },
   { command: "about", icon: "◆" },
   { command: "experience", icon: "❯" },
   { command: "projects", icon: "▤" },
   { command: "skills", icon: "⚙" },
   { command: "contact", icon: "✉" },
   { command: "resume", icon: "↓", variant: "cv" },
-  { command: "neofetch", icon: "✦" },
+  { command: "neofetch", icon: "✦", desktopOnly: true },
   { command: "help", icon: "?" },
 ];
 
@@ -38,15 +43,15 @@ export function CommandPalette({ playKey }: { playKey: () => void }) {
         {t.palette.hint}
       </div>
       <div className="cmd-row">
-        {BUTTONS.map(({ command, icon, variant }) => (
+        {BUTTONS.map(({ command, icon, variant, label, desktopOnly }) => (
           <button
             key={command}
             type="button"
-            className={variant === "cv" ? "cbtn cv" : "cbtn"}
+            className={["cbtn", variant, desktopOnly && "desktop-only"].filter(Boolean).join(" ")}
             onClick={() => activate(command)}
           >
             <span className="ic">{icon}</span>
-            {command}
+            {label ? t.palette[label] : command}
           </button>
         ))}
       </div>

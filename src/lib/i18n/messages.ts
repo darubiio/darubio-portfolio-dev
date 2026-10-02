@@ -21,8 +21,12 @@ export interface Messages {
     hintPre: string;
     hintHelp: string;
     hintPost: string;
-    askNew: string;
-    askQuestion: string;
+    aiLabel: string;
+    aiTitle: string;
+    aiTry: string;
+    aiQuestions: readonly string[];
+    fitPre: string;
+    fitPost: string;
   };
   help: {
     /** description per command name (command name itself stays as typed) */
@@ -49,7 +53,7 @@ export interface Messages {
   notfound: { notFound: string; tryPre: string; tryPost: string; didYouMean: string };
   theme: { label: string };
   lang: { label: string; en: string; es: string };
-  palette: { hint: string };
+  palette: { hint: string; ai: string };
   contact: {
     labels: { email: string; location: string; linkedin: string; github: string; resume: string };
     downloadCv: string;
@@ -87,8 +91,19 @@ const en: Messages = {
     hintPre: "// Type a command, or just click the buttons below. Try ",
     hintHelp: "help",
     hintPost: " if you're lost.",
-    askNew: "// new — ask me anything: ",
-    askQuestion: "Can he ship a SaaS solo?",
+    aiLabel: "ask the ai",
+    aiTitle: "Ask anything about my experience — answers come from my real CV, in seconds.",
+    aiTry: "click to ask:",
+    aiQuestions: [
+      "Has he worked in banking?",
+      "What has he built with React?",
+      "Is he open to work?",
+      "What's his experience with micro-frontends?",
+      "Which of his projects are in production?",
+      "Can he lead a frontend project end to end?",
+    ],
+    fitPre: "// hiring? paste a job offer after ",
+    fitPost: " and get an honest match score.",
   },
   help: {
     commands: {
@@ -162,7 +177,7 @@ const en: Messages = {
   notfound: { notFound: "command not found: ", tryPre: "// try ", tryPost: " to see what I respond to.", didYouMean: "// did you mean" },
   theme: { label: "theme → " },
   lang: { label: "language → ", en: "English 🇬🇧", es: "Español 🇪🇸" },
-  palette: { hint: "not a terminal person? just click ↓" },
+  palette: { hint: "not a terminal person? just click ↓", ai: "ask ai" },
   contact: {
     labels: { email: "email", location: "location", linkedin: "linkedin", github: "github", resume: "resume" },
     downloadCv: "download CV (.pdf)",
@@ -206,8 +221,19 @@ const es: Messages = {
     hintPre: "// Escribe un comando, o haz clic en los botones de abajo. Prueba ",
     hintHelp: "help",
     hintPost: " si te pierdes.",
-    askNew: "// nuevo — pregúntame lo que sea: ",
-    askQuestion: "¿Puede sacar un SaaS él solo?",
+    aiLabel: "pregunta a la ia",
+    aiTitle: "Pregunta lo que quieras sobre mi experiencia: responde con datos reales de mi CV, en segundos.",
+    aiTry: "haz clic para preguntar:",
+    aiQuestions: [
+      "¿Ha trabajado en banca?",
+      "¿Qué ha construido con React?",
+      "¿Está disponible para trabajar?",
+      "¿Qué experiencia tiene con micro-frontends?",
+      "¿Qué proyectos tiene en producción?",
+      "¿Puede liderar un proyecto frontend de principio a fin?",
+    ],
+    fitPre: "// ¿contratando? pega una oferta después de ",
+    fitPost: " y obtén una valoración honesta del encaje.",
   },
   help: {
     commands: {
@@ -281,7 +307,7 @@ const es: Messages = {
   notfound: { notFound: "comando no encontrado: ", tryPre: "// prueba ", tryPost: " para ver a qué respondo.", didYouMean: "// ¿querías decir" },
   theme: { label: "tema → " },
   lang: { label: "idioma → ", en: "English 🇬🇧", es: "Español 🇪🇸" },
-  palette: { hint: "¿no eres de terminal? haz clic ↓" },
+  palette: { hint: "¿no eres de terminal? haz clic ↓", ai: "chat ia" },
   contact: {
     labels: { email: "correo", location: "lugar", linkedin: "linkedin", github: "github", resume: "cv" },
     downloadCv: "descargar CV (.pdf)",
