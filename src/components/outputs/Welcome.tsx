@@ -10,14 +10,16 @@ import { useTerminal } from "@/context/TerminalContext";
 import { BANNER } from "@/lib/ascii";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useMessages } from "@/hooks/useMessages";
+import { useCommandLabel } from "@/hooks/useCommandLabel";
 
 export function Welcome() {
   const { identity } = usePortfolio();
   const t = useMessages();
   const { run } = useTerminal();
+  const label = useCommandLabel();
   const [question, setQuestion] = useState(t.welcome.aiQuestions[0]);
   const [paused, setPaused] = useState(false);
-  const askCmd = `ask "${question}"`;
+  const askCmd = `${label("ask")} "${question}"`;
 
   return (
     <OutputBlock>
@@ -31,7 +33,7 @@ export function Welcome() {
       </div>
       <div className="row" style={{ marginTop: 8 }}>
         <span className="cmt">{t.welcome.hintPre}</span>
-        <CommandLink cmd="help">{t.welcome.hintHelp}</CommandLink>
+        <CommandLink cmd={label("help")}>{label("help")}</CommandLink>
         <span className="cmt">{t.welcome.hintPost}</span>
       </div>
       <div
@@ -48,7 +50,7 @@ export function Welcome() {
           <span className="cmt">{t.welcome.aiTry}</span>{" "}
           <button type="button" className="link" aria-label={askCmd} onClick={() => run(askCmd)}>
             <span aria-hidden>
-              ask &quot;
+              {label("ask")} &quot;
               <TypeCycle phrases={t.welcome.aiQuestions} paused={paused} onChange={setQuestion} />
               &quot;
             </span>
@@ -56,7 +58,7 @@ export function Welcome() {
         </div>
         <div className="row cmt">
           {t.welcome.fitPre}
-          <CommandLink cmd="fit">fit</CommandLink>
+          <CommandLink cmd={label("fit")}>{label("fit")}</CommandLink>
           {t.welcome.fitPost}
         </div>
       </div>

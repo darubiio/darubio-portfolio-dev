@@ -13,6 +13,7 @@ import { Lightbox } from "@/components/terminal/Lightbox";
 import { LangHint } from "@/components/terminal/LangHint";
 import { InputLine } from "@/components/terminal/InputLine";
 import { readInitialCommand } from "@/lib/deeplink";
+import { commandLabel } from "@/lib/commands";
 import { useTheme } from "@/hooks/useTheme";
 import { useLang } from "@/hooks/useLang";
 import { useSound } from "@/hooks/useSound";
@@ -58,7 +59,7 @@ export function Terminal() {
     const initial = readInitialCommand();
     if (initial) {
       clear();
-      run(initial);
+      run(commandLabel(initial, lang));
     }
     focusInput();
   });

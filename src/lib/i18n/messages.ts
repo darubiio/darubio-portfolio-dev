@@ -19,7 +19,6 @@ export interface Messages {
   };
   welcome: {
     hintPre: string;
-    hintHelp: string;
     hintPost: string;
     aiLabel: string;
     aiTitle: string;
@@ -48,7 +47,7 @@ export interface Messages {
   };
   stats: { see: string };
   share: { intro: string; copy: string; copied: string };
-  ask: { thinking: string; unavailable: string; modeOn: string; modeOff: string; running: string; next: string };
+  ask: { thinking: string; translating: string; unavailable: string; modeOn: string; modeOff: string; running: string; next: string };
   fit: { hint: string; score: string };
   notfound: { notFound: string; tryPre: string; tryPost: string; didYouMean: string };
   theme: { label: string };
@@ -89,7 +88,6 @@ const en: Messages = {
   },
   welcome: {
     hintPre: "// Type a command, or just click the buttons below. Try ",
-    hintHelp: "help",
     hintPost: " if you're lost.",
     aiLabel: "ask the ai",
     aiTitle: "Ask anything about my experience — answers come from my real CV, in seconds.",
@@ -164,6 +162,7 @@ const en: Messages = {
   },
   ask: {
     thinking: "thinking",
+    translating: "translating",
     unavailable: "assistant unavailable right now — try the contact command.",
     modeOn: "// ai mode on — every line you type is a question. type exit to leave.",
     modeOff: "// back to the shell.",
@@ -219,7 +218,6 @@ const es: Messages = {
   },
   welcome: {
     hintPre: "// Escribe un comando, o haz clic en los botones de abajo. Prueba ",
-    hintHelp: "help",
     hintPost: " si te pierdes.",
     aiLabel: "pregunta a la ia",
     aiTitle: "Pregunta lo que quieras sobre mi experiencia: responde con datos reales de mi CV, en segundos.",
@@ -294,14 +292,15 @@ const es: Messages = {
   },
   ask: {
     thinking: "pensando",
-    unavailable: "asistente no disponible ahora mismo — prueba el comando contact.",
-    modeOn: "// modo ia activado — cada línea que escribas es una pregunta. escribe exit para salir.",
+    translating: "traduciendo",
+    unavailable: "asistente no disponible ahora mismo — prueba el comando contacto.",
+    modeOn: "// modo ia activado — cada línea que escribas es una pregunta. escribe salir para volver.",
     modeOff: "// de vuelta al shell.",
     running: "ejecutando",
     next: "también puedes preguntar:",
   },
   fit: {
-    hint: "// pega la descripción del puesto tras fit, p. ej.  fit Senior React engineer, TypeScript, Node.js, AWS…",
+    hint: "// pega la descripción del puesto tras encaje, p. ej.  encaje Senior React engineer, TypeScript, Node.js, AWS…",
     score: "encaje",
   },
   notfound: { notFound: "comando no encontrado: ", tryPre: "// prueba ", tryPost: " para ver a qué respondo.", didYouMean: "// ¿querías decir" },
@@ -319,7 +318,7 @@ const es: Messages = {
   easter: {
     sudoPassword: "contraseña de",
     sudoIncident: "no está en el fichero sudoers. Este incidente será reportado. 🚨",
-    sudoHidden: "// buen intento. comandos ocultos: whoami · ls · matrix · coffee · joke · open-to-work",
+    sudoHidden: "// buen intento. comandos ocultos: whoami · ls · matrix · cafe · chiste · disponible",
     whoami: "// solo un dev al que le gusta entregar cosas que se quedan entregadas.",
     lsNote: "// ejecuta el nombre de un comando para hacer `cat` de cualquiera de estos.",
     coffee: "// ☕ preparando... funciona con café y TypeScript.",

@@ -1,3 +1,5 @@
+import type { Lang } from "@/lib/i18n/types";
+
 export const COMMAND_NAMES = [
   "welcome",
   "help",
@@ -24,7 +26,69 @@ export type CommandName = (typeof COMMAND_NAMES)[number];
 
 const COMMAND_SET = new Set<string>(COMMAND_NAMES);
 
-export const AUTOCOMPLETE = [...COMMAND_NAMES, "ask", "fit", "exit", "clear", "theme", "lang", "matrix"];
+const AUTOCOMPLETE_EN = [...COMMAND_NAMES, "ask", "fit", "exit", "clear", "theme", "lang", "matrix"];
+
+/**
+ * Spanish names for the commands. Commands stay English internally (URLs, the AI
+ * trailer, the registry); these are only what a Spanish visitor sees and types.
+ * Both languages are always accepted as input.
+ */
+const ES_NAMES: Readonly<Record<string, string>> = {
+  help: "ayuda",
+  about: "sobre-mi",
+  stats: "cifras",
+  experience: "experiencia",
+  projects: "proyectos",
+  skills: "habilidades",
+  education: "formacion",
+  languages: "idiomas",
+  contact: "contacto",
+  resume: "cv",
+  share: "compartir",
+  ask: "preguntar",
+  fit: "encaje",
+  exit: "salir",
+  clear: "limpiar",
+  theme: "tema",
+  lang: "idioma",
+  coffee: "cafe",
+  joke: "chiste",
+  "open-to-work": "disponible",
+};
+
+const FROM_ES: Readonly<Record<string, string>> = {
+  ...Object.fromEntries(Object.entries(ES_NAMES).map(([en, es]) => [es, en])),
+  "sobre-mí": "about",
+  sobremi: "about",
+  sobremí: "about",
+  formación: "education",
+  café: "coffee",
+};
+
+const THEME_ARGS: Readonly<Record<string, string>> = { claro: "light", oscuro: "dark" };
+
+const AUTOCOMPLETE_ES = AUTOCOMPLETE_EN.map((command) => ES_NAMES[command] ?? command);
+
+const completions = (lang: Lang) => (lang === "es" ? AUTOCOMPLETE_ES : AUTOCOMPLETE_EN);
+
+/** The name a visitor sees (and can type) for a command in the given language. */
+export function commandLabel(command: string, lang: Lang): string {
+  return lang === "es" ? (ES_NAMES[command] ?? command) : command;
+}
+
+/**
+ * Rewrites a Spanish command word (and the theme argument) to its English form,
+ * keeping the rest of the input untouched: "preguntar ¿Qué…?" → "ask ¿Qué…?".
+ */
+export function normalizeInput(input: string): string {
+  const match = /^(\S+)(\s+[\s\S]*)?$/.exec(input);
+  if (!match) return input;
+  const word = match[1].toLowerCase();
+  const command = FROM_ES[word] ?? word;
+  let rest = match[2] ?? "";
+  if (command === "theme") rest = rest.replace(/^\s+(\S+)$/, (all, arg: string) => ` ${THEME_ARGS[arg.toLowerCase()] ?? arg}`);
+  return command === word ? input : command + rest;
+}
 
 /** Extracts the question from an `ask <question>` input, stripping wrapping quotes. */
 export function parseAsk(input: string): string | null {
@@ -55,11 +119,11 @@ function levenshtein(a: string, b: string): number {
 }
 
 /** Closest known command for a typo ("projetcs" → "projects"), or null when nothing is close. */
-export function suggestCommand(key: string): string | null {
+export function suggestCommand(key: string, lang: Lang): string | null {
   if (key.length < 3) return null;
   let best: string | null = null;
   let bestDistance = 3;
-  for (const command of AUTOCOMPLETE) {
+  for (const command of completions(lang)) {
     const distance = levenshtein(key, command);
     if (distance < bestDistance) {
       bestDistance = distance;
@@ -80,13 +144,14 @@ export function looksLikeQuestion(input: string): boolean {
  * for empty input, anything with a space (free-text `ask …`, `theme dark`), and
  * inputs that already equal a command.
  */
-export function ghostCompletion(value: string): string | null {
+export function ghostCompletion(value: string, lang: Lang): string | null {
   const v = value.toLowerCase();
   if (!v || v.includes(" ")) return null;
+  const list = completions(lang);
   // An exactly-typed command needs no ghost — and this lets a full word like
   // "lang" win over the longer "languages" that shares its prefix.
-  if (AUTOCOMPLETE.includes(v)) return null;
-  const match = AUTOCOMPLETE.find((command) => command.startsWith(v));
+  if (list.includes(v)) return null;
+  const match = list.find((command) => command.startsWith(v));
   if (!match || match === v) return null;
   return match;
 }
@@ -96,7 +161,8 @@ export function isCommandName(key: string): key is CommandName {
 }
 
 export function resolveCommand(key: string): CommandName | null {
-  return isCommandName(key) ? key : null;
+  const command = FROM_ES[key] ?? key;
+  return isCommandName(command) ? command : null;
 }
 
 export function isClear(key: string): boolean {

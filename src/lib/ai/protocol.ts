@@ -13,7 +13,7 @@ import type { Lang } from "@/lib/i18n/types";
  *
  * `fit` answers additionally start with `score: N/10`.
  */
-export type AiMode = "ask" | "fit";
+export type AiMode = "ask" | "fit" | "translate";
 
 export interface Turn {
   role: "user" | "assistant";
@@ -25,6 +25,9 @@ export interface AiRequest {
   question: string;
   lang: Lang;
   history?: Turn[];
+  /** translate only: the answer to translate into `lang`, and the mode that produced it. */
+  text?: string;
+  of?: "ask" | "fit";
 }
 
 export interface Trailer {

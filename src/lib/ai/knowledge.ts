@@ -25,7 +25,7 @@ function buildRules(lang: Lang, p: Portfolio): Rule[] {
       match: /\b(hire|available|availab|open to work|freelance|contract|disponib|contrat)/i,
       answer: () =>
         es
-          ? `${identity.name} está ${identity.status.label.toLowerCase()}. Contáctale en ${contact.email} o ${contact.linkedin} — mira el comando contact.`
+          ? `${identity.name} está ${identity.status.label.toLowerCase()}. Contáctale en ${contact.email} o ${contact.linkedin} — mira el comando contacto.`
           : `${identity.name} is ${identity.status.label.toLowerCase()}. Reach him at ${contact.email} or ${contact.linkedin} — see the contact command.`,
       cmd: "contact",
     },
@@ -57,7 +57,7 @@ function buildRules(lang: Lang, p: Portfolio): Rule[] {
       match: /\b(project|built|build|proyecto|portfolio work|construy)/i,
       answer: () =>
         es
-          ? `Destacados: ${projects.map((p2) => `${p2.name} (${p2.kind})`).join(", ")}. Ejecuta el comando projects para capturas y detalles.`
+          ? `Destacados: ${projects.map((p2) => `${p2.name} (${p2.kind})`).join(", ")}. Ejecuta el comando proyectos para capturas y detalles.`
           : `Highlights: ${projects.map((p2) => `${p2.name} (${p2.kind})`).join(", ")}. Run the projects command for screenshots and details.`,
       cmd: "projects",
     },
@@ -84,7 +84,7 @@ function buildRules(lang: Lang, p: Portfolio): Rule[] {
       match: /\b(contact|email|reach|linkedin|github|contacto|correo)/i,
       answer: () =>
         es
-          ? `Correo ${contact.email}, LinkedIn ${contact.linkedin}, GitHub ${contact.github}. El comando contact lo tiene todo.`
+          ? `Correo ${contact.email}, LinkedIn ${contact.linkedin}, GitHub ${contact.github}. El comando contacto lo tiene todo.`
           : `Email ${contact.email}, LinkedIn ${contact.linkedin}, GitHub ${contact.github}. The contact command has it all.`,
       cmd: "contact",
     },
@@ -94,7 +94,7 @@ function buildRules(lang: Lang, p: Portfolio): Rule[] {
 function defaultAnswer(lang: Lang, p: Portfolio): string {
   const { identity } = p;
   return lang === "es"
-    ? `${identity.name} es ${identity.role} (${identity.stack}) con más de 6 años llevando a producción en banca, transporte y logística. Pregunta por su experiencia, proyectos, skills o disponibilidad — o prueba los comandos about, projects y contact.`
+    ? `${identity.name} es ${identity.role} (${identity.stack}) con más de 6 años llevando a producción en banca, transporte y logística. Pregunta por su experiencia, proyectos, skills o disponibilidad — o prueba los comandos sobre-mi, proyectos y contacto.`
     : `${identity.name} is a ${identity.role} (${identity.stack}) with 6+ years shipping to production across banking, transport and logistics. Ask about his experience, projects, skills or availability — or try the about, projects and contact commands.`;
 }
 
@@ -102,7 +102,7 @@ function defaultAnswer(lang: Lang, p: Portfolio): string {
 export function refusal(lang: Lang): string {
   const name = getPortfolio(lang).identity.name;
   return lang === "es"
-    ? `Solo respondo preguntas sobre ${name} — su experiencia, proyectos, skills y disponibilidad. Prueba los comandos about, projects o contact.`
+    ? `Solo respondo preguntas sobre ${name} — su experiencia, proyectos, skills y disponibilidad. Prueba los comandos sobre-mi, proyectos o contacto.`
     : `I only answer questions about ${name} — his experience, projects, skills and availability. Try the about, projects or contact commands.`;
 }
 

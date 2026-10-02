@@ -6,6 +6,7 @@ import {
   isMatrix,
   langTarget,
   looksLikeQuestion,
+  normalizeInput,
   parseAsk,
   parseFit,
   resolveCommand,
@@ -65,11 +66,13 @@ export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) 
 
   const run = useCallback(
     (raw: string) => {
-      const cmd = raw.trim();
+      const typed = raw.trim();
+      // Spanish command names are rewritten to the English ones the shell understands; the echo keeps what was typed.
+      const cmd = normalizeInput(typed);
       const key = cmd.toLowerCase();
       const t = messages[lang];
 
-      if (cmd) commandHistory.push(cmd);
+      if (typed) commandHistory.push(typed);
 
       if (isClear(key)) {
         setHistory([]);
@@ -77,7 +80,7 @@ export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) 
         return;
       }
 
-      const echo: HistoryEntry = { id: nextId(), kind: "input", input: cmd, prompt: chatMode ? "ai" : "shell" };
+      const echo: HistoryEntry = { id: nextId(), kind: "input", input: typed, prompt: chatMode ? "ai" : "shell" };
       const push = (...specs: OutputSpec[]) =>
         setHistory((prev) => [...prev, echo, ...specs.map((spec) => ({ id: nextId(), kind: "output" as const, spec }))]);
       const askSpec = (question: string): OutputSpec => ({
@@ -153,7 +156,7 @@ export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) 
         return;
       }
 
-      push({ type: "notfound", cmd, suggestion: suggestCommand(key) });
+      push({ type: "notfound", cmd: typed, suggestion: suggestCommand(typed.toLowerCase(), lang) });
     },
     [commandHistory, nextId, setTheme, theme, setLang, lang, chatMode],
   );

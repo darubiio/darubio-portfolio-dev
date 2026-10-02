@@ -4,20 +4,22 @@ import { useState } from "react";
 import { OutputBlock } from "@/components/outputs/OutputBlock";
 import { AiChips } from "@/components/outputs/AiChips";
 import { useAiStream } from "@/hooks/useAiStream";
+import { useTranslatedAnswer } from "@/hooks/useTranslatedAnswer";
 import { useLang } from "@/hooks/useLang";
 import { useMessages } from "@/hooks/useMessages";
 import { parseTrailer, visibleBody } from "@/lib/ai/protocol";
 
 /** `fit <job description>`: the model scores the match and explains it. */
 export function Fit({ jd }: { jd: string }) {
-  // Assessed in the language the site had when it was requested: toggling it later must not re-run the request.
+  // Assessed once, in the language the site had then; a later switch translates the result instead of re-running it.
   const [lang] = useState(useLang().lang);
   const t = useMessages();
   const { status, text } = useAiStream({ mode: "fit", question: jd, lang });
 
   const done = status === "done";
-  const trailer = done ? parseTrailer(text) : null;
-  const body = visibleBody(text).replace(/^score:.*\n?/i, "");
+  const shown = useTranslatedAnswer(done ? { of: "fit", question: jd, text, from: lang } : null);
+  const trailer = done ? parseTrailer(shown.text) : null;
+  const body = visibleBody(shown.text).replace(/^score:.*\n?/i, "");
 
   return (
     <OutputBlock>
@@ -39,9 +41,14 @@ export function Fit({ jd }: { jd: string }) {
         ) : status === "error" ? (
           <span className="var">{t.ask.unavailable}</span>
         ) : (
-          <span className={status === "streaming" ? "type-caret" : undefined}>{body}</span>
+          <span className={status === "streaming" ? "type-caret" : shown.translating ? "muted" : undefined}>{body}</span>
         )}
       </div>
+      {shown.translating ? (
+        <div className="row muted type-caret" style={{ marginTop: 4 }}>
+          {t.ask.translating}
+        </div>
+      ) : null}
       {trailer ? <AiChips trailer={trailer} /> : null}
     </OutputBlock>
   );

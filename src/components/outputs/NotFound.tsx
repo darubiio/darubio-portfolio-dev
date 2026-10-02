@@ -3,9 +3,11 @@
 import { OutputBlock } from "@/components/outputs/OutputBlock";
 import { CommandLink } from "@/components/outputs/CommandLink";
 import { useMessages } from "@/hooks/useMessages";
+import { useCommandLabel } from "@/hooks/useCommandLabel";
 
 export function NotFound({ cmd, suggestion }: { cmd: string; suggestion: string | null }) {
   const t = useMessages();
+  const label = useCommandLabel();
 
   return (
     <OutputBlock>
@@ -20,7 +22,7 @@ export function NotFound({ cmd, suggestion }: { cmd: string; suggestion: string 
       ) : (
         <div className="row cmt">
           {t.notfound.tryPre}
-          <span className="str">help</span>
+          <CommandLink cmd={label("help")}>{label("help")}</CommandLink>
           {t.notfound.tryPost}
         </div>
       )}

@@ -4,11 +4,13 @@ import { OutputBlock } from "@/components/outputs/OutputBlock";
 import { useTerminal } from "@/context/TerminalContext";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useMessages } from "@/hooks/useMessages";
+import { useCommandLabel } from "@/hooks/useCommandLabel";
 
 export function Stats() {
   const { stats } = usePortfolio();
   const { run } = useTerminal();
   const t = useMessages();
+  const label = useCommandLabel();
 
   return (
     <OutputBlock>
@@ -18,10 +20,10 @@ export function Stats() {
             type="button"
             className="stat-card"
             key={stat.unit}
-            onClick={() => run(stat.cmd)}
+            onClick={() => run(label(stat.cmd))}
           >
             <span className="stat-see" aria-hidden>
-              ↳ {stat.cmd}
+              ↳ {label(stat.cmd)}
             </span>
             <div className="stat-value">
               {stat.value}
@@ -29,7 +31,7 @@ export function Stats() {
             </div>
             <div className="stat-label">{stat.label}</div>
             <span className="sr-only">
-              — {t.stats.see} {stat.cmd}
+              — {t.stats.see} {label(stat.cmd)}
             </span>
           </button>
         ))}

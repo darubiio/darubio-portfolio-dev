@@ -1,4 +1,4 @@
-import { buildFitPrompt, buildSystemPrompt, languageReminder } from "@/lib/ai/system-prompt";
+import { buildFitPrompt, buildSystemPrompt, buildTranslatePrompt, languageReminder } from "@/lib/ai/system-prompt";
 import { cannedAnswer, cannedFit, refusal } from "@/lib/ai/knowledge";
 import { looksLikeInjection } from "@/lib/ai/guard";
 import { aiEnabled, streamChat, type ChatMessage } from "@/lib/ai/providers";
@@ -9,9 +9,13 @@ import type { Lang } from "@/lib/i18n/types";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MAX_LEN: Record<AiMode, number> = { ask: 200, fit: 3000 };
-const MAX_TOKENS: Record<AiMode, number> = { ask: 320, fit: 480 };
-const BUDGET_WEIGHT: Record<AiMode, number> = { ask: 1, fit: 2 };
+type SourceMode = Exclude<AiMode, "translate">;
+
+const MAX_LEN: Record<SourceMode, number> = { ask: 200, fit: 3000 };
+const MAX_TOKENS: Record<AiMode, number> = { ask: 320, fit: 480, translate: 560 };
+const BUDGET_WEIGHT: Record<AiMode, number> = { ask: 1, fit: 2, translate: 1 };
+/** An answer to translate: the longest `fit` reply (480 tokens) fits comfortably. */
+const MAX_TRANSLATE_LEN = 2500;
 const MAX_HISTORY = 6;
 const MAX_TURN_LEN = 500;
 const MAX_BODY_BYTES = 12000;
@@ -51,14 +55,18 @@ function sanitiseHistory(raw: unknown): Turn[] {
   return raw
     .filter(
       (t): t is Turn =>
-        typeof t === "object" && t !== null && (t.role === "user" || t.role === "assistant") && typeof t.content === "string",
+        typeof t === "object" &&
+        t !== null &&
+        (t.role === "user" || t.role === "assistant") &&
+        typeof t.content === "string",
     )
     .map((t) => ({ role: t.role, content: t.content.trim().slice(0, MAX_TURN_LEN) }))
     .filter((t) => t.content.length > 0)
     .slice(-MAX_HISTORY);
 }
 
-const fallback = (mode: AiMode, question: string, lang: Lang) =>
+// The canned path answers in any language for free, so a translation without a model just answers again.
+const fallback = (mode: SourceMode, question: string, lang: Lang) =>
   text(mode === "fit" ? cannedFit(question, lang) : cannedAnswer(question, lang));
 
 export async function POST(req: Request): Promise<Response> {
@@ -67,13 +75,24 @@ export async function POST(req: Request): Promise<Response> {
   if (Number(req.headers.get("content-length")) > MAX_BODY_BYTES) return text("payload too large", 413);
 
   let mode: AiMode = "ask";
+  let source: SourceMode = "ask";
   let question = "";
+  let answer = "";
   let lang: Lang = "en";
   let history: Turn[] = [];
   try {
-    const body = (await req.json()) as { mode?: unknown; question?: unknown; lang?: unknown; history?: unknown };
-    mode = body.mode === "fit" ? "fit" : "ask";
+    const body = (await req.json()) as {
+      mode?: unknown;
+      question?: unknown;
+      lang?: unknown;
+      history?: unknown;
+      text?: unknown;
+      of?: unknown;
+    };
+    mode = body.mode === "fit" || body.mode === "translate" ? body.mode : "ask";
+    source = mode === "translate" ? (body.of === "fit" ? "fit" : "ask") : mode;
     question = typeof body.question === "string" ? body.question.trim() : "";
+    answer = mode === "translate" && typeof body.text === "string" ? body.text.trim() : "";
     lang = body.lang === "es" ? "es" : "en";
     history = mode === "ask" ? sanitiseHistory(body.history) : [];
   } catch {
@@ -81,16 +100,21 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   // Guardrail #5 — bounded input.
-  if (!question || question.length > MAX_LEN[mode]) return text("bad request", 400);
+  if (!question || question.length > MAX_LEN[source]) return text("bad request", 400);
+  if (mode === "translate" && (!answer || answer.length > MAX_TRANSLATE_LEN)) return text("bad request", 400);
 
   // Guardrail #7 (first line) — short-circuit obvious injection/jailbreak in the
-  // question or in any visitor turn of the history, before the model or any budget is touched.
-  if (looksLikeInjection(question) || history.some((t) => t.role === "user" && looksLikeInjection(t.content))) {
+  // question, the text to translate or any visitor turn of the history, before the model or any budget is touched.
+  if (
+    looksLikeInjection(question) ||
+    looksLikeInjection(answer) ||
+    history.some((t) => t.role === "user" && looksLikeInjection(t.content))
+  ) {
     return text(refusal(lang));
   }
 
   // Guardrail #8 — kill switch / no key → canned.
-  if (!aiEnabled()) return fallback(mode, question, lang);
+  if (!aiEnabled()) return fallback(source, question, lang);
 
   // Guardrails #3 / #4 — per-IP rate limit + global daily budget.
   // A Redis outage must never 500 the endpoint: degrade to the canned path.
@@ -98,27 +122,36 @@ export async function POST(req: Request): Promise<Response> {
   if (limit === "rate_limited") {
     return text(
       lang === "es"
-        ? "Demasiadas preguntas ahora mismo — dale un minuto, o usa el comando contact."
+        ? "Demasiadas preguntas ahora mismo — dale un minuto, o usa el comando contacto."
         : "Too many questions right now — give it a minute, or use the contact command.",
       429,
     );
   }
-  if (limit === "budget_exceeded") return fallback(mode, question, lang);
-  if (limit === "unconfigured" && process.env.NODE_ENV === "production") return fallback(mode, question, lang);
+  if (limit === "budget_exceeded") return fallback(source, question, lang);
+  if (limit === "unconfigured" && process.env.NODE_ENV === "production") return fallback(source, question, lang);
 
   // Live model — streamed, capped (guardrails #6, #7, #10).
   try {
-    const messages: ChatMessage[] = [
-      { role: "system", content: mode === "fit" ? buildFitPrompt(lang) : buildSystemPrompt(lang) },
-      ...history.map<ChatMessage>((t) => ({ role: t.role, content: t.role === "user" ? frame(t.content) : t.content })),
-      {
-        role: "user",
-        content:
-          mode === "fit"
-            ? `Assess the fit for this job description. ${frame(question)}\n${languageReminder(lang)}`
-            : `Answer this visitor's question about Daniel. ${frame(question)}\n${languageReminder(lang)}`,
-      },
-    ];
+    const messages: ChatMessage[] =
+      mode === "translate"
+        ? [
+            { role: "system", content: buildTranslatePrompt(lang) },
+            { role: "user", content: `Translate this text. ${frame(answer)}\n${languageReminder(lang)}` },
+          ]
+        : [
+            { role: "system", content: mode === "fit" ? buildFitPrompt(lang) : buildSystemPrompt(lang) },
+            ...history.map<ChatMessage>((t) => ({
+              role: t.role,
+              content: t.role === "user" ? frame(t.content) : t.content,
+            })),
+            {
+              role: "user",
+              content:
+                mode === "fit"
+                  ? `Assess the fit for this job description. ${frame(question)}\n${languageReminder(lang)}`
+                  : `Answer this visitor's question about Daniel. ${frame(question)}\n${languageReminder(lang)}`,
+            },
+          ];
 
     // req.signal aborts the upstream stream when the visitor leaves — no wasted tokens.
     const iterator = await streamChat(messages, req.signal, MAX_TOKENS[mode]);
@@ -140,6 +173,6 @@ export async function POST(req: Request): Promise<Response> {
       headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" },
     });
   } catch {
-    return fallback(mode, question, lang);
+    return fallback(source, question, lang);
   }
 }

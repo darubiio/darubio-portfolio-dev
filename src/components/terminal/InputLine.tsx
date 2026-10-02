@@ -4,6 +4,7 @@ import { useState, type KeyboardEvent, type RefObject } from "react";
 import { Prompt } from "@/components/terminal/Prompt";
 import { ghostCompletion } from "@/lib/commands";
 import { useTerminal } from "@/context/TerminalContext";
+import { useLang } from "@/hooks/useLang";
 import type { useCommandHistory } from "@/hooks/useCommandHistory";
 
 interface InputLineProps {
@@ -18,9 +19,10 @@ export function InputLine({ inputRef, run, clear, playKey, commandHistory }: Inp
   const [value, setValue] = useState("");
   const [focused, setFocused] = useState(true);
   const { chatMode } = useTerminal();
+  const { lang } = useLang();
 
   // In chat mode every line is free text: no command completion.
-  const ghost = chatMode ? null : ghostCompletion(value);
+  const ghost = chatMode ? null : ghostCompletion(value, lang);
 
   const submit = () => {
     run(value);

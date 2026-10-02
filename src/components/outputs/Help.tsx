@@ -5,9 +5,11 @@ import { OutputBlock } from "@/components/outputs/OutputBlock";
 import { Heading } from "@/components/outputs/Heading";
 import { CommandLink } from "@/components/outputs/CommandLink";
 import { useMessages } from "@/hooks/useMessages";
+import { useCommandLabel } from "@/hooks/useCommandLabel";
 
 export function Help() {
   const t = useMessages();
+  const label = useCommandLabel();
 
   return (
     <OutputBlock>
@@ -16,7 +18,7 @@ export function Help() {
         {t.help.order.map((command) => (
           <Fragment key={command}>
             <div>
-              <CommandLink cmd={command}>{command}</CommandLink>
+              <CommandLink cmd={label(command)}>{label(command)}</CommandLink>
             </div>
             <div className="muted">{t.help.commands[command]}</div>
           </Fragment>

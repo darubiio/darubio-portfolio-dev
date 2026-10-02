@@ -3,19 +3,20 @@
 import type { CSSProperties } from "react";
 import { useTerminal } from "@/context/TerminalContext";
 import { useMessages } from "@/hooks/useMessages";
+import { useCommandLabel } from "@/hooks/useCommandLabel";
 
 interface PaletteButton {
   command: string;
   icon: string;
   variant?: "cv" | "ai";
   /** Visible label when it differs from the command (and needs translating). */
-  label?: "ai";
+  text?: "ai";
   /** Dropped on small screens so the palette keeps to two rows. */
   desktopOnly?: boolean;
 }
 
 const BUTTONS: ReadonlyArray<PaletteButton> = [
-  { command: "ask", icon: "✦", variant: "ai", label: "ai" },
+  { command: "ask", icon: "✦", variant: "ai", text: "ai" },
   { command: "about", icon: "◆" },
   { command: "experience", icon: "❯" },
   { command: "projects", icon: "▤" },
@@ -29,6 +30,7 @@ const BUTTONS: ReadonlyArray<PaletteButton> = [
 export function CommandPalette({ playKey }: { playKey: () => void }) {
   const { run } = useTerminal();
   const t = useMessages();
+  const label = useCommandLabel();
 
   const activate = (command: string) => {
     playKey();
@@ -44,16 +46,16 @@ export function CommandPalette({ playKey }: { playKey: () => void }) {
         {t.palette.hint}
       </div>
       <div className="cmd-row">
-        {BUTTONS.map(({ command, icon, variant, label, desktopOnly }, index) => (
+        {BUTTONS.map(({ command, icon, variant, text, desktopOnly }, index) => (
           <button
             key={command}
             type="button"
             className={["cbtn", variant, desktopOnly && "desktop-only"].filter(Boolean).join(" ")}
             style={{ "--i": index } as CSSProperties}
-            onClick={() => activate(command)}
+            onClick={() => activate(label(command))}
           >
             <span className="ic">{icon}</span>
-            {label ? t.palette[label] : command}
+            {text ? t.palette[text] : label(command)}
           </button>
         ))}
       </div>
