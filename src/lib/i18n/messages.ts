@@ -51,6 +51,7 @@ export interface Messages {
   fit: { hint: string; score: string };
   notfound: { notFound: string; tryPre: string; tryPost: string; didYouMean: string };
   theme: { label: string };
+  suggest: { light: string; dark: string; hint: string };
   lang: { label: string; en: string; es: string };
   palette: { hint: string; ai: string };
   contact: {
@@ -175,6 +176,7 @@ const en: Messages = {
   },
   notfound: { notFound: "command not found: ", tryPre: "// try ", tryPost: " to see what I respond to.", didYouMean: "// did you mean" },
   theme: { label: "theme → " },
+  suggest: { light: "light theme", dark: "dark theme", hint: "tab complete · ↑↓ choose · esc close" },
   lang: { label: "language → ", en: "English 🇬🇧", es: "Español 🇪🇸" },
   palette: { hint: "not a terminal person? just click ↓", ai: "ask ai" },
   contact: {
@@ -305,6 +307,7 @@ const es: Messages = {
   },
   notfound: { notFound: "comando no encontrado: ", tryPre: "// prueba ", tryPost: " para ver a qué respondo.", didYouMean: "// ¿querías decir" },
   theme: { label: "tema → " },
+  suggest: { light: "tema claro", dark: "tema oscuro", hint: "tab completa · ↑↓ elige · esc cierra" },
   lang: { label: "idioma → ", en: "English 🇬🇧", es: "Español 🇪🇸" },
   palette: { hint: "¿no eres de terminal? haz clic ↓", ai: "chat ia" },
   contact: {

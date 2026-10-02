@@ -138,24 +138,6 @@ export function looksLikeQuestion(input: string): boolean {
   return input.includes(" ") || /[?¿]$/.test(input);
 }
 
-/**
- * Returns the autocomplete match for the current input, or null. Shared by the
- * Tab handler and the inline ghost-text hint so the two never diverge. Suppressed
- * for empty input, anything with a space (free-text `ask …`, `theme dark`), and
- * inputs that already equal a command.
- */
-export function ghostCompletion(value: string, lang: Lang): string | null {
-  const v = value.toLowerCase();
-  if (!v || v.includes(" ")) return null;
-  const list = completions(lang);
-  // An exactly-typed command needs no ghost — and this lets a full word like
-  // "lang" win over the longer "languages" that shares its prefix.
-  if (list.includes(v)) return null;
-  const match = list.find((command) => command.startsWith(v));
-  if (!match || match === v) return null;
-  return match;
-}
-
 export function isCommandName(key: string): key is CommandName {
   return COMMAND_SET.has(key);
 }
