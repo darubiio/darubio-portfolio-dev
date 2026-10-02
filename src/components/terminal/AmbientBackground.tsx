@@ -15,6 +15,8 @@ export function AmbientBackground() {
           <div className="tilt t3">
             <div className="ring r3" />
           </div>
+          {/* Rings collected from the pointer join here (PointerGlow.tsx). */}
+          <div className="ring-pool" />
         </div>
       </div>
       <div className="vignette" />

@@ -93,6 +93,12 @@ body {
 .tilt.t3 {
   transform: translate3d(4vw, 30vh, 0) rotateX(-48deg) rotateY(-34deg);
 }
+.ring-pool {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+}
 /* The whole gyroscope wanders slowly around the viewport. */
 .drift {
   position: absolute;
