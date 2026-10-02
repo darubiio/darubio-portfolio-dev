@@ -7,7 +7,7 @@ export function HistoryView({ history }: { history: HistoryEntry[] }) {
     <>
       {history.map((item) =>
         item.kind === "input" ? (
-          <div className="row" key={item.id}>
+          <div className="row" key={item.id} data-echo>
             <Prompt mode={item.prompt} />
             <span className="cmd-echo">{item.input}</span>
           </div>

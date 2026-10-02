@@ -35,7 +35,7 @@ export function Terminal() {
   const { theme, setTheme } = useTheme();
   const { lang, setLang } = useLang();
   const { sound, toggleSound, playKey } = useSound();
-  const { ref: termRef, scrollToBottom } = useAutoScroll<HTMLDivElement>();
+  const { ref: termRef, scrollToLatest } = useAutoScroll<HTMLDivElement>();
   const inputRef = useRef<HTMLInputElement>(null);
   const windowRef = useRef<HTMLDivElement>(null);
   const [lightbox, setLightbox] = useState<StaticImageData | null>(null);
@@ -74,10 +74,10 @@ export function Terminal() {
 
   const actions: TerminalActions = { run: runCommand, openLightbox: setLightbox, chatMode, rememberAiTurn };
 
-  // The landing view is read from the top; anything run afterwards scrolls into view.
+  // The landing view is read from the top; each new command scrolls its echo to the top of the view.
   useEffect(() => {
-    if (!atLanding) scrollToBottom();
-  }, [atLanding, history, scrollToBottom]);
+    if (!atLanding) scrollToLatest();
+  }, [atLanding, history, scrollToLatest]);
 
   return (
     <TerminalContext value={actions}>
