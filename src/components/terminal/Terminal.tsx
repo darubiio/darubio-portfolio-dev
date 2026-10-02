@@ -12,7 +12,10 @@ import { CommandPalette } from "@/components/terminal/CommandPalette";
 import { Lightbox } from "@/components/terminal/Lightbox";
 import { LangHint } from "@/components/terminal/LangHint";
 import { InputLine } from "@/components/terminal/InputLine";
-import { readInitialCommand } from "@/lib/deeplink";
+import { readInitialCommand, syncCommandToUrl } from "@/lib/deeplink";
+import { triggerDownload } from "@/lib/download";
+import { getPortfolio } from "@/lib/i18n/getPortfolio";
+import { asset } from "@/lib/site";
 import { commandLabel } from "@/lib/commands";
 import { useTheme } from "@/hooks/useTheme";
 import { useLang } from "@/hooks/useLang";
@@ -36,7 +39,7 @@ export function Terminal() {
   const { theme, setTheme } = useTheme();
   const { lang, setLang } = useLang();
   const { sound, toggleSound, playKey } = useSound();
-  const { ref: termRef, scrollToLatest } = useAutoScroll<HTMLDivElement>();
+  const { ref: termRef, scrollToLatest, scrollToEntry } = useAutoScroll<HTMLDivElement>();
   const inputRef = useRef<HTMLInputElement>(null);
   const windowRef = useRef<HTMLDivElement>(null);
   const [lightbox, setLightbox] = useState<StaticImageData | null>(null);
@@ -73,7 +76,31 @@ export function Terminal() {
     focusInput();
   };
 
-  const actions: TerminalActions = { run: runCommand, openLightbox: setLightbox, chatMode, rememberAiTurn };
+  const openCommand = (command: string) => {
+    if (command === "ask" && chatMode) {
+      focusInput();
+      return;
+    }
+    let index = history.length - 1;
+    while (index >= 0) {
+      const entry = history[index];
+      if (entry.kind === "output" && entry.spec.type === "command" && entry.spec.name === command) break;
+      index -= 1;
+    }
+    if (index === -1) {
+      runCommand(commandLabel(command, lang));
+      return;
+    }
+    // Already on screen: go there (to its echo, if it has one) rather than print it again.
+    const output = history[index];
+    const echo = history[index - 1];
+    scrollToEntry(echo?.kind === "input" ? echo.id : output.id, output.id);
+    syncCommandToUrl(command);
+    if (command === "resume") triggerDownload(asset(getPortfolio(lang).contact.cv));
+    focusInput();
+  };
+
+  const actions: TerminalActions = { run: runCommand, open: openCommand, chatMode, rememberAiTurn, openLightbox: setLightbox };
 
   // The landing view is read from the top; each new command scrolls its echo to the top of the view.
   useEffect(() => {

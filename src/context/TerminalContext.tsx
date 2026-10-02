@@ -5,6 +5,11 @@ import type { StaticImageData } from "next/image";
 
 export interface TerminalActions {
   run: (command: string) => void;
+  /**
+   * Quick-access buttons: scrolls to the section if that command's output is already on
+   * screen instead of printing it again; otherwise runs it like `run`.
+   */
+  open: (command: string) => void;
   openLightbox: (image: StaticImageData) => void;
   /** `ask` with no argument toggles this: every typed line becomes a question. */
   chatMode: boolean;

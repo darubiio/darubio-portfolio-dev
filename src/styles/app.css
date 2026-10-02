@@ -480,7 +480,7 @@ body {
 }
 /* The landing view is server-rendered and holds the LCP element: no fade-in, or its
    first paint is at opacity 0 and Chrome discards it as an LCP candidate. */
-.instant {
+.entry {
   display: contents;
 }
 .instant > .out {

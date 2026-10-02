@@ -28,13 +28,13 @@ const BUTTONS: ReadonlyArray<PaletteButton> = [
 ];
 
 export function CommandPalette({ playKey }: { playKey: () => void }) {
-  const { run } = useTerminal();
+  const { open } = useTerminal();
   const t = useMessages();
   const label = useCommandLabel();
 
   const activate = (command: string) => {
     playKey();
-    run(command);
+    open(command);
   };
 
   return (
@@ -52,7 +52,7 @@ export function CommandPalette({ playKey }: { playKey: () => void }) {
             type="button"
             className={["cbtn", variant, desktopOnly && "desktop-only"].filter(Boolean).join(" ")}
             style={{ "--i": index } as CSSProperties}
-            onClick={() => activate(label(command))}
+            onClick={() => activate(command)}
           >
             <span className="ic">{icon}</span>
             {text ? t.palette[text] : label(command)}

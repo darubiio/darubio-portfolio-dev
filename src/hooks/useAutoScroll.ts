@@ -28,5 +28,27 @@ export function useAutoScroll<T extends HTMLElement>() {
     });
   }, []);
 
-  return { ref, scrollToLatest };
+  /**
+   * Scrolls an existing history entry to the top of the view (same placement as a new
+   * command) and briefly highlights `flashId`'s output so the eye lands on it.
+   */
+  const scrollToEntry = useCallback((targetId: number, flashId: number) => {
+    const el = ref.current;
+    if (!el) return;
+    const box = (id: number) => {
+      const node = el.querySelector<HTMLElement>(`[data-entry="${id}"]`);
+      // Output wrappers are `display: contents` (no box of their own): use their block.
+      return node?.classList.contains("entry") ? (node.firstElementChild as HTMLElement | null) : node;
+    };
+    const target = box(targetId);
+    if (!target) return;
+    el.scrollTop += target.getBoundingClientRect().top - el.getBoundingClientRect().top - TOP_GAP;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    box(flashId)?.animate(
+      [{ backgroundColor: "color-mix(in oklab, var(--accent) 14%, transparent)" }, { backgroundColor: "transparent" }],
+      { duration: 1400, easing: "ease-out" },
+    );
+  }, []);
+
+  return { ref, scrollToLatest, scrollToEntry };
 }

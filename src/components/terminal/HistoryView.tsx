@@ -7,16 +7,15 @@ export function HistoryView({ history }: { history: HistoryEntry[] }) {
     <>
       {history.map((item) =>
         item.kind === "input" ? (
-          <div className="row" key={item.id} data-echo>
+          <div className="row" key={item.id} data-echo data-entry={item.id}>
             <Prompt mode={item.prompt} />
             <span className="cmd-echo">{item.input}</span>
           </div>
-        ) : item.instant ? (
-          <div className="instant" key={item.id}>
+        ) : (
+          // `display: contents` wrapper: addressable for the palette's scroll-to, invisible to layout.
+          <div className={item.instant ? "entry instant" : "entry"} key={item.id} data-entry={item.id}>
             <CommandOutput spec={item.spec} />
           </div>
-        ) : (
-          <CommandOutput key={item.id} spec={item.spec} />
         ),
       )}
     </>
