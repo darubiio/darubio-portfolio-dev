@@ -49,8 +49,8 @@ function buildRules(lang: Lang, p: Portfolio): Rule[] {
       match: /\b(backend|node|api|\.net|golang|\bgo\b|database|postgres|redis|sql|base de datos)/i,
       answer: () =>
         es
-          ? `Es full-stack: ${skills[1].items.join(", ")} en backend, ${skills[2].items.join(", ")} para datos. Construyó sistemas políglotas en tiempo real (Node.js, .NET, Go) para los túneles de la M-30 de Madrid.`
-          : `He's full-stack: ${skills[1].items.join(", ")} on the backend, ${skills[2].items.join(", ")} for data. Built polyglot real-time systems (Node.js, .NET, Go) for Madrid's M-30 tunnels.`,
+          ? `Su foco es el frontend, con experiencia sólida de backend: ${skills[1].items.join(", ")}, ${skills[2].items.join(", ")} para datos. Construyó sistemas políglotas en tiempo real (Node.js, .NET, Go) para los túneles de la M-30 de Madrid.`
+          : `His focus is frontend, backed by solid backend experience: ${skills[1].items.join(", ")}, ${skills[2].items.join(", ")} for data. Built polyglot real-time systems (Node.js, .NET, Go) for Madrid's M-30 tunnels.`,
       cmd: "skills, experience",
     },
     {

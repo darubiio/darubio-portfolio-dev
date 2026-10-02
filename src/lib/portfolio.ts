@@ -4,10 +4,10 @@ export const portfolio: Portfolio = {
   identity: {
     name: "Daniel Rubio",
     fullName: "Daniel Alejandro Rubio Linares",
-    role: "Software Engineer",
-    stack: "React · TypeScript · Next.js · Node.js",
+    role: "Frontend Engineer",
+    stack: "React · TypeScript · Next.js",
     location: "Madrid, Spain",
-    tagline: "6+ years shipping full-stack systems to production.",
+    tagline: "6+ years building production frontends for banking, transport and logistics.",
     handle: "darubiio",
     status: { open: true, label: "Open to work" },
     uptime: "6+ years in prod",

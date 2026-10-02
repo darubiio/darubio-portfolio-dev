@@ -11,6 +11,7 @@ import { portfolio as en } from "@/lib/portfolio";
  */
 
 const role = {
+  "Frontend Engineer": "Ingeniero Frontend",
   "Software Engineer": "Ingeniero de Software",
   "IT Consultant": "Consultor IT",
   "Web Developer": "Desarrollador web",
@@ -140,7 +141,7 @@ export const portfolioEs: Portfolio = {
     ...en.identity,
     role: role[en.identity.role as keyof typeof role] ?? en.identity.role,
     location: "Madrid, España",
-    tagline: "Más de 6 años llevando sistemas full-stack a producción.",
+    tagline: "Más de 6 años construyendo frontends en producción para banca, transporte y logística.",
     status: { ...en.identity.status, label: "Disponible para trabajar" },
     uptime: "6+ años en prod",
   },

@@ -38,6 +38,8 @@ const nextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
+    // 75 is the default; 85 only for the portrait, where skin and hair show compression first.
+    qualities: [75, 85],
     // Static imports carry a content hash in the URL, so optimized output can be cached for a year.
     minimumCacheTTL: 31536000,
   },

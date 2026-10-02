@@ -16,7 +16,7 @@ export function About() {
     <OutputBlock>
       <Heading>{t.headings.about}</Heading>
       <div className="about-grid">
-        <AvatarTile />
+        <AvatarTile eager />
         <div>
           {about.map((line, index) => (
             <AboutBioLine key={`${index}-${line}`} line={line} />

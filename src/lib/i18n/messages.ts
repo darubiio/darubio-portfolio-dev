@@ -192,7 +192,7 @@ const en: Messages = {
     whoami: "// just a dev who likes shipping things that stay shipped.",
     lsNote: "// run a command name to `cat` any of these.",
     coffee: "// ☕ brewing... runs on coffee & TypeScript.",
-    openToWork: "Currently open to frontend / full-stack roles (React · TypeScript · Next.js).",
+    openToWork: "Currently open to frontend roles (React · TypeScript · Next.js).",
     reachMe: "Reach me → ",
     jokes: [
       "There are 10 kinds of people: those who read binary and those who don't.",
@@ -322,7 +322,7 @@ const es: Messages = {
     whoami: "// solo un dev al que le gusta entregar cosas que se quedan entregadas.",
     lsNote: "// ejecuta el nombre de un comando para hacer `cat` de cualquiera de estos.",
     coffee: "// ☕ preparando... funciona con café y TypeScript.",
-    openToWork: "Abierto a roles de frontend / full-stack (React · TypeScript · Next.js).",
+    openToWork: "Abierto a roles de frontend (React · TypeScript · Next.js).",
     reachMe: "Contáctame → ",
     jokes: [
       "Hay 10 tipos de personas: las que leen binario y las que no.",
