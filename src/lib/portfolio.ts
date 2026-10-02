@@ -14,13 +14,13 @@ export const portfolio: Portfolio = {
   },
 
   about: [
-    "Software engineer with 6+ years building user interfaces with JavaScript and React,",
-    "and the full stack behind them with Next.js, TypeScript and Node.js. Track record",
-    "shipping mission-critical systems to production across banking, transport and logistics.",
+    "Frontend engineer with 6+ years building web applications with React, TypeScript",
+    "and Next.js. I have delivered production interfaces for mission-critical systems",
+    "in banking, transport and logistics, working closely with backend and product teams.",
     "",
-    "Focused on clean, efficient front-end work. I like the boring parts: reliability,",
-    "observability, code the on-call engineer (sometimes me) doesn't curse at 3am —",
-    "and I'm eager to bring that to more innovative, high-impact projects. // 99.9% uptime, 0.1% luck",
+    "My focus is on scalable component architecture, performance, accessibility and",
+    "maintainable code, backed by testing and CI/CD. I am looking to contribute that",
+    "experience to teams building ambitious, high-impact products.",
   ],
 
   stats: [

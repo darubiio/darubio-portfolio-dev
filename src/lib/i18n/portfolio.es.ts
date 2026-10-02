@@ -122,13 +122,13 @@ export const portfolioEs: Portfolio = {
   },
 
   about: [
-    "Ingeniero de software con más de 6 años construyendo interfaces de usuario con JavaScript y React,",
-    "y el full stack que hay detrás con Next.js, TypeScript y Node.js. Trayectoria llevando",
-    "sistemas críticos a producción en banca, transporte y logística.",
+    "Ingeniero frontend con más de 6 años desarrollando aplicaciones web con React, TypeScript",
+    "y Next.js. He llevado a producción interfaces para sistemas críticos en banca,",
+    "transporte y logística, colaborando estrechamente con equipos de backend y producto.",
     "",
-    "Enfocado en un frontend limpio y eficiente. Me gustan las partes aburridas: fiabilidad,",
-    "observabilidad y código que el ingeniero de guardia (a veces yo) no maldice a las 3am —",
-    "y quiero llevarlo a proyectos más innovadores y de alto impacto. // 99.9% uptime, 0.1% suerte",
+    "Mi trabajo se centra en arquitecturas de componentes escalables, rendimiento, accesibilidad",
+    "y código mantenible, respaldado por testing y CI/CD. Busco aportar esa experiencia",
+    "a equipos que desarrollen productos ambiciosos y de alto impacto.",
   ],
 
   stats: [
