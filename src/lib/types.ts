@@ -76,9 +76,12 @@ export interface Stat {
 
 export interface Contact {
   email: string;
+  /** Only printed on the downloadable CV. */
+  phone: string;
   location: string;
   linkedin: string;
   github: string;
+  /** Path of the generated CV for this language (served by app/cv/[file]/route.ts). */
   cv: string;
 }
 

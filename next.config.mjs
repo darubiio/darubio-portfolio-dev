@@ -31,6 +31,8 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   reactCompiler: true,
+  // pdfkit reads its font metrics from node_modules at runtime: keep it out of the bundle.
+  serverExternalPackages: ["pdfkit"],
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
@@ -38,6 +40,10 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     // Static imports carry a content hash in the URL, so optimized output can be cached for a year.
     minimumCacheTTL: 31536000,
+  },
+  async redirects() {
+    // The CV used to be a hand-made static file; old links now get the generated one.
+    return [{ source: "/assets/Daniel-Rubio-CV.pdf", destination: "/cv/Daniel-Rubio-CV-ES.pdf", permanent: true }];
   },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];

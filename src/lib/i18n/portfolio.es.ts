@@ -25,6 +25,30 @@ const sector = {
   Corporate: "Corporativo",
 } as const;
 
+const MONTHS: Record<string, string> = {
+  Jan: "ene.",
+  Feb: "feb.",
+  Mar: "mar.",
+  Apr: "abr.",
+  May: "may.",
+  Jun: "jun.",
+  Jul: "jul.",
+  Aug: "ago.",
+  Sep: "sept.",
+  Oct: "oct.",
+  Nov: "nov.",
+  Dec: "dic.",
+};
+
+/** "Nov 2024 — Present" → "nov. 2024 — actualidad". */
+const localizePeriod = (period: string) =>
+  period.replace(/\b[A-Z][a-z]{2}\b/g, (month) => MONTHS[month] ?? month).replace("Present", "actualidad");
+
+const PLACE_WORDS: Record<string, string> = { Spain: "España", hybrid: "híbrido", remote: "remoto", Havana: "La Habana" };
+
+/** "Madrid · Spain · hybrid" → "Madrid · España · híbrido". */
+const localizePlace = (place: string) => place.replace(/\b[A-Za-z]+\b/g, (word) => PLACE_WORDS[word] ?? word);
+
 // Indexed by the English `experience` order.
 const experiencePoints: string[][] = [
   [
@@ -142,6 +166,9 @@ export const portfolioEs: Portfolio = {
     ...entry,
     role: role[entry.role as keyof typeof role] ?? entry.role,
     sector: sector[entry.sector as keyof typeof sector] ?? entry.sector,
+    company: entry.company.replace("client:", "cliente:"),
+    period: localizePeriod(entry.period),
+    place: localizePlace(entry.place),
     points: experiencePoints[i] ?? entry.points,
   })),
 
@@ -171,5 +198,5 @@ export const portfolioEs: Portfolio = {
     level: languageContent[i]?.level ?? language.level,
   })),
 
-  contact: en.contact,
+  contact: { ...en.contact, location: "Madrid, España", cv: "cv/Daniel-Rubio-CV-ES.pdf" },
 };

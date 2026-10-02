@@ -15,7 +15,7 @@ import {
 } from "@/lib/commands";
 import { syncCommandToUrl } from "@/lib/deeplink";
 import { triggerDownload } from "@/lib/download";
-import { portfolio } from "@/lib/portfolio";
+import { getPortfolio } from "@/lib/i18n/getPortfolio";
 import { asset } from "@/lib/site";
 import { messages } from "@/lib/i18n/messages";
 import type { HistoryEntry, OutputSpec } from "@/lib/history";
@@ -133,7 +133,7 @@ export function useTerminalShell({ theme, setTheme, lang, setLang }: ShellDeps) 
       if (name) {
         syncCommandToUrl(name);
         push({ type: "command", name });
-        if (key === "resume") window.setTimeout(() => triggerDownload(asset(portfolio.contact.cv)), 200);
+        if (key === "resume") window.setTimeout(() => triggerDownload(asset(getPortfolio(lang).contact.cv)), 200);
         return;
       }
 

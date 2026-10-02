@@ -15,7 +15,7 @@ export function Resume() {
         <span className="ok" style={{ color: "var(--green)" }}>
           ✓
         </span>{" "}
-        {t.resume.downloading} <span className="b">Daniel-Rubio-CV.pdf</span> ...
+        {t.resume.downloading} <span className="b">{contact.cv.split("/").pop()}</span> ...
       </div>
       <div className="row">
         <a className="link" href={asset(contact.cv)} download>

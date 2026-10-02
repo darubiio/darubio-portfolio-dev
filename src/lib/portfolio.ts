@@ -207,9 +207,10 @@ export const portfolio: Portfolio = {
 
   contact: {
     email: "darubiio97@icloud.com",
+    phone: "+34 698 925 539",
     location: "Madrid, Spain",
     linkedin: "linkedin.com/in/darubiio",
     github: "github.com/darubiio",
-    cv: "assets/Daniel-Rubio-CV.pdf",
+    cv: "cv/Daniel-Rubio-CV-EN.pdf",
   },
 };
