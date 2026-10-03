@@ -34,7 +34,7 @@ export const portfolio: Portfolio = {
     {
       role: "Software Engineer",
       company: "CaixaBank Tech",
-      place: "Madrid · Spain · hybrid",
+      place: "Las Rozas, Madrid · Spain · hybrid",
       period: "Nov 2024 — Present",
       sector: "Banking",
       current: true,
@@ -76,7 +76,7 @@ export const portfolio: Portfolio = {
     {
       role: "Web Developer",
       company: "Freelance",
-      place: "Cuba · remote",
+      place: "Havana, Cuba · remote",
       period: "Dec 2019 — May 2021",
       sector: "Multi-sector",
       current: false,
