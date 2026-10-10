@@ -1,53 +1,47 @@
+/* Taken from the profile photo: navy suit, white shirt, grey studio backdrop.
+   Flat colours only — no gradients, no translucency over a background. */
 :root {
-  --bg-deep: #0c1220;
-  --glass: rgba(40, 44, 52, 0.5);
-  --glass-2: rgba(33, 37, 43, 0.72);
-  --header: rgba(30, 33, 39, 0.78);
-  --border: rgba(255, 255, 255, 0.08);
-  --border-2: rgba(255, 255, 255, 0.05);
-  --fg: #abb2bf;
-  --fg-bright: #d7dae0;
-  --dim: #5c6370;
-  --blue: #61afef;
-  --green: #98c379;
-  --purple: #c678dd;
-  --red: #e06c75;
-  --yellow: #e5c07b;
-  --orange: #d19a66;
-  --cyan: #56b6c2;
+  --bg-deep: #0d1522;
+  --glass: #131d2e;
+  --glass-2: #1a2639;
+  --header: #101929;
+  --border: rgba(242, 241, 238, 0.09);
+  --border-2: rgba(242, 241, 238, 0.06);
+  --fg: #c3c8d1;
+  --fg-bright: #f2f1ee;
+  --dim: #8792a3;
+  --blue: #9db8dd;
+  --green: #a3bfa0;
+  --purple: #b4a8d2;
+  --red: #d99393;
+  --yellow: #d8c08e;
+  --orange: #d4a582;
+  --cyan: #93bfc6;
   --accent: var(--blue);
-  --selection: rgba(97, 175, 239, 0.3);
-  --shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
-  --shot-border: rgba(255, 255, 255, 0.1);
-  /* Aurora borealis: teal wash over a night-blue sky. */
-  --wash: rgba(52, 211, 153, 0.26);
-  --vignette: rgba(2, 6, 16, 0.66);
-  --grid-line: rgba(255, 255, 255, 0.025);
+  --selection: rgba(157, 184, 221, 0.25);
+  --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shot-border: rgba(242, 241, 238, 0.1);
 }
 
 [data-theme="light"] {
-  --bg-deep: #efd9cb;
-  --glass: rgba(250, 250, 250, 0.56);
-  --glass-2: rgba(244, 244, 245, 0.78);
-  --header: rgba(236, 236, 238, 0.82);
-  --border: rgba(0, 0, 0, 0.1);
-  --border-2: rgba(0, 0, 0, 0.06);
-  --fg: #383a42;
-  --fg-bright: #1a1c22;
-  --dim: #a0a1a7;
-  --blue: #4078f2;
-  --green: #50a14f;
-  --purple: #a626a4;
-  --red: #e45649;
-  --yellow: #c18401;
-  --orange: #986801;
-  --cyan: #0184bc;
+  --bg-deep: #e3e3e1;
+  --glass: #fbfbfa;
+  --glass-2: #f2f2f0;
+  --header: #f4f4f2;
+  --border: rgba(19, 28, 46, 0.12);
+  --border-2: rgba(19, 28, 46, 0.07);
+  --fg: #2f3a4d;
+  --fg-bright: #121b2c;
+  --dim: #5f6878;
+  --blue: #284a7e;
+  --green: #3f6e45;
+  --purple: #5d4f8c;
+  --red: #a2403f;
+  --yellow: #7c5f14;
+  --orange: #8d5634;
+  --cyan: #22636e;
   --accent: var(--blue);
-  --selection: rgba(64, 120, 242, 0.22);
-  --shadow: 0 30px 70px -24px rgba(48, 52, 70, 0.45), 0 6px 20px -8px rgba(48, 52, 70, 0.3);
-  --shot-border: rgba(0, 0, 0, 0.12);
-  /* Sunrise: peach wash over a warm dawn sky. */
-  --wash: rgba(255, 160, 110, 0.34);
-  --vignette: rgba(120, 70, 60, 0.32);
-  --grid-line: rgba(0, 0, 0, 0.03);
+  --selection: rgba(40, 74, 126, 0.16);
+  --shadow: 0 20px 50px -24px rgba(19, 28, 46, 0.28), 0 2px 6px rgba(19, 28, 46, 0.06);
+  --shot-border: rgba(19, 28, 46, 0.12);
 }

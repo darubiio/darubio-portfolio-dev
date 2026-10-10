@@ -4,8 +4,6 @@ import { useEffect, useEffectEvent, useRef, useState, useSyncExternalStore } fro
 import dynamic from "next/dynamic";
 import type { StaticImageData } from "next/image";
 import { TerminalContext, type TerminalActions } from "@/context/TerminalContext";
-import { AmbientBackground } from "@/components/terminal/AmbientBackground";
-import { GlassFilter } from "@/components/terminal/GlassFilter";
 import { TitleBar } from "@/components/terminal/TitleBar";
 import { HistoryView } from "@/components/terminal/HistoryView";
 import { CommandPalette } from "@/components/terminal/CommandPalette";
@@ -41,7 +39,6 @@ export function Terminal() {
   const { sound, toggleSound, playKey } = useSound();
   const { ref: termRef, scrollToLatest, scrollToEntry } = useAutoScroll<HTMLDivElement>();
   const inputRef = useRef<HTMLInputElement>(null);
-  const windowRef = useRef<HTMLDivElement>(null);
   const [lightbox, setLightbox] = useState<StaticImageData | null>(null);
 
   const shell = useTerminalShell({ theme, setTheme, lang, setLang });
@@ -109,9 +106,8 @@ export function Terminal() {
 
   return (
     <TerminalContext value={actions}>
-      <AmbientBackground />
       <div className="stage" onClick={focusInput}>
-        <div className="window" ref={windowRef} onClick={(event) => event.stopPropagation()}>
+        <div className="window" onClick={(event) => event.stopPropagation()}>
           <TitleBar
             sound={sound}
             theme={theme}
@@ -134,8 +130,6 @@ export function Terminal() {
           />
         </div>
       </div>
-      {/* After the window so its ref is attached before this layout effect runs. */}
-      <GlassFilter target={windowRef} />
       {matrixActive ? <MatrixRain onExit={exitMatrix} /> : null}
       <Lightbox image={lightbox} onClose={() => setLightbox(null)} />
     </TerminalContext>

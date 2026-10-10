@@ -90,7 +90,7 @@ const en: Messages = {
   welcome: {
     hintPre: "// Type a command, or just click the buttons below. Try ",
     hintPost: " if you're lost.",
-    aiLabel: "ask the ai",
+    aiLabel: "Ask the AI",
     aiTitle: "Ask anything about my experience — answers come from my real CV, in seconds.",
     aiTry: "click to ask:",
     aiQuestions: [
@@ -221,7 +221,7 @@ const es: Messages = {
   welcome: {
     hintPre: "// Escribe un comando, o haz clic en los botones de abajo. Prueba ",
     hintPost: " si te pierdes.",
-    aiLabel: "pregunta a la ia",
+    aiLabel: "Pregunta a la IA",
     aiTitle: "Pregunta lo que quieras sobre mi experiencia: responde con datos reales de mi CV, en segundos.",
     aiTry: "haz clic para preguntar:",
     aiQuestions: [

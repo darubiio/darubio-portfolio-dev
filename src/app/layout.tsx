@@ -16,12 +16,12 @@ export const metadata = siteMetadata;
 export const viewport: Viewport = {
   colorScheme: "dark light",
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0c1220" },
-    { media: "(prefers-color-scheme: light)", color: "#efd9cb" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d1522" },
+    { media: "(prefers-color-scheme: light)", color: "#e3e3e1" },
   ],
 };
 
-const themeScript = `(function(){try{var t=localStorage.getItem("rubio-theme")||"dark";document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}if(navigator.userAgentData)document.documentElement.classList.add("lg");})();`;
+const themeScript = `(function(){try{var t=localStorage.getItem("rubio-theme")||"dark";document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();`;
 
 const langScript = `(function(){try{var l=localStorage.getItem("rubio-lang")==="es"?"es":"en";document.documentElement.setAttribute("lang",l);}catch(e){}})();`;
 

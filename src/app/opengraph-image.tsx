@@ -9,16 +9,16 @@ export const contentType = "image/png";
 export const alt = `${portfolio.identity.name} — ${portfolio.identity.role}`;
 
 const colors = {
-  bg: "#15171c",
-  glass: "#21252b",
-  border: "rgba(255,255,255,0.08)",
-  fg: "#abb2bf",
-  fgBright: "#d7dae0",
-  dim: "#5c6370",
-  green: "#98c379",
-  blue: "#61afef",
-  purple: "#c678dd",
-  cyan: "#56b6c2",
+  bg: "#0d1522",
+  glass: "#131d2e",
+  border: "rgba(242,241,238,0.09)",
+  fg: "#c3c8d1",
+  fgBright: "#f2f1ee",
+  dim: "#8792a3",
+  green: "#a3bfa0",
+  blue: "#9db8dd",
+  purple: "#b4a8d2",
+  cyan: "#93bfc6",
 };
 
 export default async function OpengraphImage() {
@@ -40,7 +40,6 @@ export default async function OpengraphImage() {
         display: "flex",
         flexDirection: "column",
         backgroundColor: colors.bg,
-        backgroundImage: `radial-gradient(circle at 18% 20%, rgba(97,175,239,0.22), transparent 45%), radial-gradient(circle at 85% 80%, rgba(198,120,221,0.18), transparent 45%)`,
         fontFamily: "monospace",
         padding: 64,
       }}
@@ -70,7 +69,7 @@ export default async function OpengraphImage() {
               width: 16,
               height: 16,
               borderRadius: 16,
-              backgroundColor: "#ff5f57",
+              backgroundColor: "#3a4558",
             }}
           />
           <div
@@ -78,7 +77,7 @@ export default async function OpengraphImage() {
               width: 16,
               height: 16,
               borderRadius: 16,
-              backgroundColor: "#febc2e",
+              backgroundColor: "#3a4558",
             }}
           />
           <div
@@ -86,7 +85,7 @@ export default async function OpengraphImage() {
               width: 16,
               height: 16,
               borderRadius: 16,
-              backgroundColor: "#28c840",
+              backgroundColor: "#3a4558",
             }}
           />
           <div style={{ marginLeft: 18, fontSize: 24, color: colors.dim }}>
