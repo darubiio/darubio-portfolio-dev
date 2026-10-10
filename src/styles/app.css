@@ -37,8 +37,6 @@ body {
   inset: 0;
   overflow: hidden;
   z-index: 0;
-  perspective: 1300px;
-  perspective-origin: 50% 46%;
 }
 .bg-stage::after {
   content: "";
@@ -49,9 +47,8 @@ body {
   background-size: 44px 44px;
   mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, #000 30%, transparent 78%);
 }
-/* Ambient background: one colour wash + three thin rings with a conic glow.
-   Every layer is pre-rasterised (gradients, no filter: blur) and animates
-   transform only, so motion is compositor-side. */
+/* Ambient background: one colour wash, pre-rasterised (gradient, no filter: blur),
+   animating transform only, so motion is compositor-side. */
 .wash {
   position: absolute;
   left: 8vw;
@@ -62,186 +59,6 @@ body {
   background: radial-gradient(closest-side, var(--wash) 0%, transparent 70%);
   will-change: transform;
   animation: wash 46s ease-in-out infinite alternate;
-}
-/* Gyroscope: three tilted rings inside a slowly turning preserve-3d group, so
-   they weave through each other (real plane intersection) and their projected
-   thickness changes with the tilt. A white conic "reflection" sweeps each ring
-   the other way; hue-rotate drifts the tone between cyan, blue and violet. */
-.gyro {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 0;
-  height: 0;
-  transform-style: preserve-3d;
-  animation: gyro 110s linear infinite;
-}
-.tilt {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform-style: preserve-3d;
-}
-/* Each ring sits off the gyro's axis, so the group's turn swings it across
-   the screen instead of spinning in place. */
-.tilt.t1 {
-  transform: translate3d(-28vw, -10vh, 0) rotateX(68deg) rotateY(-12deg);
-}
-.tilt.t2 {
-  transform: translate3d(26vw, 12vh, 0) rotateY(64deg) rotateX(22deg);
-}
-.tilt.t3 {
-  transform: translate3d(4vw, 30vh, 0) rotateX(-48deg) rotateY(-34deg);
-}
-.ring-pool {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform-style: preserve-3d;
-}
-/* The whole gyroscope wanders slowly around the viewport. */
-.drift {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  animation: drift 82s ease-in-out infinite;
-}
-.ring {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: var(--d);
-  height: var(--d);
-  margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2);
-  border-radius: 50%;
-  border: 1px solid var(--ring-line);
-  background: conic-gradient(from 20deg, transparent 0 58%, var(--glow) 74%, transparent 90%);
-  mask: radial-gradient(closest-side, transparent 0 calc(100% - var(--t) - 2px), #000 calc(100% - var(--t)));
-  will-change: transform, filter;
-  animation:
-    spin var(--spin) linear infinite,
-    breathe var(--breathe) ease-in-out infinite alternate,
-    hue var(--hue) ease-in-out infinite alternate;
-}
-.ring::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0 42%, var(--reflect) 48%, transparent 54%);
-  animation: spin-back var(--reflect-spin) linear infinite;
-}
-.ring.r1 {
-  --d: 108vmin;
-  --t: 34px;
-  --glow: var(--glow-a);
-  --spin: 84s;
-  --breathe: 13s;
-  --hue: 21s;
-  --reflect-spin: 27s;
-  border-width: 1.5px;
-}
-.ring.r2 {
-  --d: 88vmin;
-  --t: 58px;
-  --glow: var(--glow-b);
-  --spin: 126s;
-  --breathe: 17s;
-  --hue: 29s;
-  --reflect-spin: 35s;
-  animation-direction: reverse, alternate, alternate-reverse;
-}
-.ring.r3 {
-  --d: 70vmin;
-  --t: 22px;
-  --glow: var(--glow-c);
-  --spin: 168s;
-  --breathe: 11s;
-  --hue: 25s;
-  --reflect-spin: 41s;
-}
-/* Pointer glow: a ring of the same material follows the mouse over the
-   background and sheds expanding ripples as it travels. Positioned from JS via
-   transform only (PointerGlow.tsx); ripples run on the Web Animations API. */
-.pointer-layer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.pointer-ring,
-.ripple {
-  position: absolute;
-  left: 0;
-  top: 0;
-  border-radius: 50%;
-  opacity: 0;
-  will-change: transform, opacity;
-}
-.pointer-ring {
-  width: 240px;
-  height: 240px;
-  margin: -120px 0 0 -120px;
-  border: 1px solid var(--ring-line);
-  background: conic-gradient(from 20deg, transparent 0 52%, var(--glow-a) 72%, transparent 92%);
-  mask: radial-gradient(closest-side, transparent 0 calc(100% - 24px), #000 calc(100% - 22px));
-  transition: opacity 0.35s ease;
-  animation:
-    breathe 5s ease-in-out infinite alternate,
-    hue 9s ease-in-out infinite alternate;
-}
-.pointer-ring::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0 40%, var(--reflect) 47%, transparent 54%);
-  animation: spin-back 6s linear infinite;
-}
-.ripple {
-  width: 170px;
-  height: 170px;
-  margin: -85px 0 0 -85px;
-  background: conic-gradient(from 0deg, transparent 0 45%, var(--glow-b) 68%, var(--glow-c) 82%, transparent 100%);
-  mask: radial-gradient(closest-side, transparent 0 calc(100% - 16px), #000 calc(100% - 14px));
-}
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  25% {
-    transform: translate3d(-20vw, 12vh, 0);
-  }
-  50% {
-    transform: translate3d(12vw, -18vh, 0);
-  }
-  75% {
-    transform: translate3d(22vw, 14vh, 0);
-  }
-}
-@keyframes gyro {
-  from {
-    transform: rotateX(16deg) rotateY(0deg);
-  }
-  to {
-    transform: rotateX(16deg) rotateY(360deg);
-  }
-}
-@keyframes breathe {
-  from {
-    scale: 0.9;
-  }
-  to {
-    scale: 1.12;
-  }
-}
-@keyframes hue {
-  from {
-    filter: hue-rotate(var(--hue-from));
-  }
-  to {
-    filter: hue-rotate(var(--hue-to));
-  }
 }
 .vignette {
   position: absolute;
@@ -254,16 +71,6 @@ body {
   }
   to {
     transform: translate(8vw, 6vh) scale(1.15);
-  }
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes spin-back {
-  to {
-    transform: rotate(-360deg);
   }
 }
 
@@ -1352,21 +1159,13 @@ button.link:hover {
   .cbtn {
     animation: none;
   }
-  .wash,
-  .drift,
-  .gyro,
-  .ring,
-  .ring::after {
+  .wash {
     animation: none !important;
   }
 }
 /* Small screens: freeze the ambient motion (battery) — refraction is off there anyway. */
 @media (max-width: 720px) {
-  .wash,
-  .drift,
-  .gyro,
-  .ring,
-  .ring::after {
+  .wash {
     animation: none !important;
   }
 }
